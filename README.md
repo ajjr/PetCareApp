@@ -16,6 +16,7 @@ Aion toteuttaa ainakin kolme vakionäkymää, jotka saavat oman URL-reitityksen 
 - Päivänäkymä
 - Viikkonäkymä
 - Kuukausinäkymä
+
 Kukin edellämainituista näyttää näkymän mukaiset toimenpiteet käynnissä olevalle ajanjaksolle. Mahdollisesti voisin toteuttaa myös parametriohjatun näkymän, (esim. muotoa /month/<year-month>) joka näyttää parametrina annetun aikajakson.
 
 Lisäksi aion toteuttaa lemmikinhallintanäkymän (/pet/<pet_name>), jonka avulla käyttäjä voi lisätä lemmikin ja hallita tämän tietoja. Samassa näkymässä on myös luettelo eläimen viimeisimmistä tapahtumista ja toimenpiteistä.
