@@ -1,7 +1,7 @@
 import sqlalchemy as sa
 import sqlalchemy.orm as orm
 
-from petcare.data.modelbase import Base
+from petcare.models.modelbase import Base
 
 factory = None
 
@@ -22,5 +22,5 @@ def global_init(db_path: str):
     factory = orm.sessionmaker(bind=engine)
 
     # noinspection PyUnresolvedReferences
-    import petcare.data.pet
+    import petcare.models.pet
     Base.metadata.create_all(engine)

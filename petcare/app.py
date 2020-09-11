@@ -1,7 +1,7 @@
 import datetime
 import flask
 
-import petcare.data.db_session as db_session
+import petcare.models.db_session as db_session
 
 app = flask.Flask(__name__)
 

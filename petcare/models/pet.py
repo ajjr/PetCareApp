@@ -1,5 +1,5 @@
 import sqlalchemy as sa
-from petcare.data.modelbase import Base
+from petcare.models.modelbase import Base
 # from sqlalchemy.ext.declarative import declarative_base
 
 #Base = declarative_base()

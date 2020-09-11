@@ -4,7 +4,7 @@ import flask
 blueprint = flask.Blueprint("time", __name__, template_folder="templates")
 
 
-# Some dummy data for starters
+# Some dummy models for starters
 def get_next_events():
     return [
         {"pet_name": "Rekku",
