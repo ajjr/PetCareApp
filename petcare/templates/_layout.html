@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Pet Care App</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="/static/css/site.css" />
+</head>
+<body>
+<nav>
+    <a href="/">Etusivu</a>
+    <a href="/day">Päivä</a>
+    <a href="/week">Viikko</a>
+    <a href="/month">Kuukausi</a>
+    <a href="/pet">Lisää lemmikki</a>
+</nav>
+<div class="main-content">
+    {% block main_content %} {% endblock %}
+</div>
+</body>
+</html>

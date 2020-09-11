@@ -1,0 +1,18 @@
+{% extends "_layout.html" %}
+{% block main_content %}
+<div class="container">
+    <form action="" method="post" class="pet-form">
+        <div class="row"><input class="pet-name" type="text" name="pet_name" value="{{ pet_name }}"></div>
+        <div class="row"><input type="text" name="pet_species" value="{{ pet_species }}"></div>
+        <div class="row"><input name="pet_race" type="text" value="{{ pet_race }}"></div>
+        <div class="row">
+            <div class="cell">
+                Lemmikin syntymäaika: <input type="date" name="pet_birthday" value="{{ pet_birthday }}">
+            </div>
+            <div class="cell">
+                Ikä:
+            </div>
+           </div>
+        <div class="row"><input type="text" name="pet_owner" value="{{ pet_owner }}"></div>
+    </form></div>
+{% endblock %}
