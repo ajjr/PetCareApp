@@ -26,11 +26,11 @@ def pet(pet_name=None):
         "id": ""
     }
     if pet_name is not None:
-        a_pet = pet_service.get_pet_by_name(pet_name, 3)
+        (a_pet, user) = pet_service.get_pet_by_name(pet_name, 3)
         pet_data = {
             "name": a_pet.name,
             "birthday": a_pet.birthday,
-            "owner": a_pet.owner.name,
+            "owner": user.name,
             "breeder": a_pet.breeder,
             "summary": a_pet.summary,
             "image_url": a_pet.image_url
@@ -45,12 +45,16 @@ def pet(pet_name=None):
         }
 
     if request.method == "POST":
+        breed = pet_service.get_breed(request.form["breed_id"])
+        owner = user_service.get_user(3)
         if "pet_id" not in request.form.keys():
-            breed = pet_service.get_breed(request.form["breed_id"])
-            owner = user_service.get_user(3)
             print("Insetrting new pet with {} and {}".format(breed.name, owner.name))
             # pet_service.insert_pet(request.form["pet_name"],
             #                       breed, owner)
+        else:
+            print("Updating pet {}".format(""))
+            pet_service.update_pet()
+
     else:
         pet_data["pet_name"] = "No luck!"
 

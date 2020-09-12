@@ -15,5 +15,5 @@ class Event(Base):
 
     pet_id = sa.Column(sa.Integer, sa.ForeignKey("pet.id"))
     pet = orm.relation("Pet")
-    user_id = sa.Column(sa.Integer, sa.ForeignKey("user.id"))
+    user_id = sa.Column(sa.Integer, sa.ForeignKey("users.id"))
     user = orm.relation("User")

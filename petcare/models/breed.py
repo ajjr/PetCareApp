@@ -11,4 +11,4 @@ class Breed(Base, ModelBase):
     name = sa.Column(sa.String, nullable=False, index=True)
 
     species_id = sa.Column(sa.Integer, sa.ForeignKey("species.id"))
-    species = orm.relation("Species")
+    species = orm.relation("Species", lazy="joined", join_depth=2)

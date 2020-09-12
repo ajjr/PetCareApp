@@ -7,8 +7,8 @@ from petcare.models.modelbase import ModelBase
 from petcare.models.pet import Pet
 
 
-class User(Base):
-    __tablename__ = "user"
+class User(Base, ModelBase):
+    __tablename__ = "users"
 
     id = sa.Column(sa.Integer, primary_key=True, autoincrement=True)
     username = sa.Column(sa.String, unique=True, nullable=False, index=True)

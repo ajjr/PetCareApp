@@ -3,6 +3,7 @@ from petcare.models.db_session import get_db_obj
 from petcare.models.pet import Pet
 from petcare.models.breed import Breed
 from petcare.models.species import Species
+from petcare.models.user import User
 from sqlalchemy import and_
 
 
@@ -32,14 +33,17 @@ def get_breed(breed_id) -> Breed:
     return db.get_db_obj(breed_id, Breed)
 
 
-def get_pet(pet_id) -> Pet:
+def get_pet(pet_id=None) -> Pet:
+    if pet_id is None:
+        return Pet()
     return db.get_db_obj(pet_id, Pet)
 
 
 def get_pet_by_name(pet_name, owner_id) -> Pet:
     session = db.create_session()
     try:
-        pet = session.query(Pet).filter(and_(Pet.name == pet_name, Pet.owner.id == owner_id))
+        # pet = session.query(Pet).filter(and_(Pet.name == pet_name, Pet.owner.id == owner_id))
+        pet = session.query(Pet, User).filter(Pet.name == pet_name).filter(User.id == owner_id).first()
     finally:
         session.close()
     return pet
@@ -48,7 +52,8 @@ def get_pet_by_name(pet_name, owner_id) -> Pet:
 def insert(obj):
     session = db.create_session()
     try:
-        session.add(obj)
+        if obj.id is None:
+            session.add(obj)
         session.commit()
     finally:
         session.close()
@@ -56,8 +61,13 @@ def insert(obj):
     return obj
 
 
-def insert_pet(name, breed, owner, birthday=None, breeder=None, summary=None, image_url=None) -> Pet:
-    pet = Pet()
+def insert_pet(name, breed, owner,
+               pet_id=None,
+               birthday=None,
+               breeder=None,
+               summary=None,
+               image_url=None) -> Pet:
+    pet = get_pet(pet_id)
     pet.name = name
     pet.breed = breed
     pet.owner = owner

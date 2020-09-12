@@ -36,8 +36,7 @@
             </div>
         </div>
         <div class="row"><label for="summary_field">Kuvaus</label>
-            <textarea name="pet_summary" id="summary_field" cols="30" rows="10" class="petinfo">
-                {{ pet_data['pet_summary'] }}
+            <textarea name="pet_summary" id="summary_field" cols="30" rows="10" class="petinfo">{{ pet_data['summary'] }}
             </textarea></div>
         <div class="row"><label for="owner_field">Omistaja</label><input id="owner_field" type="text" name="owner_id"
                                                                          value="{{ pet_data['owner'] }}"></div>
