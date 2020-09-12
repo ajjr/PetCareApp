@@ -1,19 +1,26 @@
+from typing import List
 import sqlalchemy as sa
+import sqlalchemy.orm as orm
+from petcare.models.modelbase import ModelBase
 from petcare.models.modelbase import Base
-# from sqlalchemy.ext.declarative import declarative_base
+from petcare.models.event import Event
 
-#Base = declarative_base()
 
-class Pet(Base):
+class Pet(Base, ModelBase):
     __tablename__ = "pet"
 
-    id = sa.Column(sa.String, primary_key=True)
+    id = sa.Column(sa.Integer, primary_key=True, autoincrement=True)
     name = sa.Column(sa.String, nullable=False, index=True)
     birthday = sa.Column(sa.DATE)
     age = sa.Column(sa.INT)
-    kennel = sa.Column(sa.String)
+    breeder = sa.Column(sa.String)
     summary = sa.Column(sa.String)
     image_url = sa.Column(sa.String)
 
-    def __repr__(self):
-        return "<Pet {}>".format(self.id)
+    breed_id = sa.Column(sa.Integer, sa.ForeignKey("breed.id"))
+    breed = orm.relation("Breed")
+
+    user_id = sa.Column(sa.Integer, sa.ForeignKey("user.id"))
+    owner = orm.relation("User")
+
+    events: List[Event] = orm.relation("Event", order_by=Event.date.desc(), back_populates="pet")

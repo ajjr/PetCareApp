@@ -1,18 +1,49 @@
 {% extends "_layout.html" %}
 {% block main_content %}
 <div class="container">
-    <form action="" method="post" class="pet-form">
-        <div class="row"><input class="pet-name" type="text" name="pet_name" value="{{ pet_name }}"></div>
-        <div class="row"><input type="text" name="pet_species" value="{{ pet_species }}"></div>
-        <div class="row"><input name="pet_race" type="text" value="{{ pet_race }}"></div>
+    <form action="/pet" method="post" class="pet-form" id="current_pet"
+          data-id="{{ pet_id }}"
+          data-species="">
+        <div class="row"><label>Lemmikki
+            <input class="pet-name" type="text" name="pet_name" value="{{ pet_data['name'] }}">
+        </label></div>
+        <div class="row">
+            <label for="select_species">Laji
+                <select name="pet_species" id="select_species"> {% for a_species in species %}
+                    <!--suppress HtmlUnknownAttribute -->
+                    <option {% if species_data[
+                    'id'] == a_species.id %}
+                    selected
+                    {% endif %} value="{{ a_species.id }}" class="pet_list_option">{{ a_species.name }}</option>{%
+                    endfor %}
+                </select></label>
+        </div>
+        <div class="row">
+            <label for="select_breed">Rotu
+                <select name="breed_id" id="select_breed">{% for breed in breeds %}
+                    <option {% if breed_data[
+                    'id'] == breed.id %}
+                    selected
+                    {% endif %} value="{{ breed.id }}" class="pet_list_option">{{ breed.name }}</option>{% endfor %}
+                </select></label>
+        </div>
         <div class="row">
             <div class="cell">
-                Lemmikin syntymäaika: <input type="date" name="pet_birthday" value="{{ pet_birthday }}">
+                Lemmikin syntymäaika: <input type="date" name="pet_birthday" value="{{ pet_data['birthday'] }}">
             </div>
             <div class="cell">
                 Ikä:
             </div>
-           </div>
-        <div class="row"><input type="text" name="pet_owner" value="{{ pet_owner }}"></div>
+        </div>
+        <div class="row"><label for="summary_field">Kuvaus</label>
+            <textarea name="pet_summary" id="summary_field" cols="30" rows="10" class="petinfo">
+                {{ pet_data['pet_summary'] }}
+            </textarea></div>
+        <div class="row"><label for="owner_field">Omistaja</label><input id="owner_field" type="text" name="owner_id"
+                                                                         value="{{ pet_data['owner'] }}"></div>
+        <div class="row"> {% if pet_id is defined %}
+            <input type="hidden" name="pet_id" value="{{ pet_id }}">
+            {% endif %}
+            <input type="submit"></div>
     </form></div>
 {% endblock %}

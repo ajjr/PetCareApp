@@ -130,4 +130,5 @@ dmypy.json
 
 .vscode/
 .idea/
+/volumes/
 /run_postgres
