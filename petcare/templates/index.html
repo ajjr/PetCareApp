@@ -1,4 +1,11 @@
 {% extends "_layout.html" %}
 {% block main_content %}
 <h1>Hello, World</h1>
+<ul class="dashboard-list">
+    {% for e in current_events %}
+    <li>{{ e.date }} {{ e.description }} {{ e.pet.name }}</li>
+    {% endfor %}
+</ul>
+
+
 {% endblock %}

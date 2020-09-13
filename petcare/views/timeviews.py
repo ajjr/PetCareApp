@@ -35,11 +35,6 @@ def get_next_events():
     ]
 
 
-@blueprint.route("/")
-def index():
-    return flask.render_template("index.html")
-
-
 @blueprint.route("/day", defaults={"date_day": None})
 @blueprint.route("/day/<string:date_day>")
 def day(date_day):

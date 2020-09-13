@@ -10,18 +10,18 @@ import petcare.models.db_session as db
 class Pet(Base, ModelBase):
     __tablename__ = "pet"
 
-    id = sa.Column(sa.Integer, primary_key=True, autoincrement=True)
-    name = sa.Column(sa.String, nullable=False, index=True)
-    birthday = sa.Column(sa.DATE)
-    age = sa.Column(sa.INT)
-    breeder = sa.Column(sa.String)
-    summary = sa.Column(sa.String)
-    image_url = sa.Column(sa.String)
+    id: int = sa.Column(sa.Integer, primary_key=True, autoincrement=True)
+    name: str = sa.Column(sa.String, nullable=False, index=True)
+    birthday: str = sa.Column(sa.DATE)
+    age: int = sa.Column(sa.INT)
+    breeder: str = sa.Column(sa.String)
+    summary: str = sa.Column(sa.String)
+    image_url: str = sa.Column(sa.String)
 
-    breed_id = sa.Column(sa.Integer, sa.ForeignKey("breed.id"))
+    breed_id: int = sa.Column(sa.Integer, sa.ForeignKey("breed.id"))
     breed = orm.relation("Breed", lazy="joined", join_depth=3)
 
-    user_id = sa.Column(sa.Integer, sa.ForeignKey("users.id"))
+    user_id: int = sa.Column(sa.Integer, sa.ForeignKey("users.id"))
     owner = orm.relation("User", lazy="joined", join_depth=1)
 
     events: List[Event] = orm.relation("Event", lazy="joined", join_depth=2, order_by=Event.date.desc(),

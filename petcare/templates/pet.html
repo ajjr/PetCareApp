@@ -9,7 +9,7 @@
         </label></div>
         <div class="row">
             <label for="select_species">Laji
-                <select name="pet_species" id="select_species"> {% for a_species in species %}
+                <select name="species_id" id="select_species"> {% for a_species in species %}
                     <!--suppress HtmlUnknownAttribute -->
                     <option {% if species_data[
                     'id'] == a_species.id %}
@@ -40,9 +40,13 @@
             </textarea></div>
         <div class="row"><label for="owner_field">Omistaja</label><input id="owner_field" type="text" name="owner_id"
                                                                          value="{{ pet_data['owner'] }}"></div>
+        <div class="row"><label for="breeder_field">Kasvattaja</label><input id="breeder_field" type="text"
+                                                                             name="breeder"
+                                                                             value="{{ pet_data['breeder'] }}"></div>
         <div class="row"> {% if pet_id is defined %}
             <input type="hidden" name="pet_id" value="{{ pet_id }}">
             {% endif %}
+            <input type="hidden" name="pet_image_url" value="{{ pet_id }}">
             <input type="submit"></div>
     </form></div>
 {% endblock %}

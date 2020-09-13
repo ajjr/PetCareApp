@@ -4,6 +4,7 @@ from petcare.models.pet import Pet
 from petcare.models.breed import Breed
 from petcare.models.species import Species
 from petcare.models.user import User
+import petcare.services.user_service as user_service
 from sqlalchemy import and_
 
 
@@ -50,9 +51,12 @@ def get_pet_by_name(pet_name, owner_id) -> Pet:
 
 
 def insert(obj):
+    print("--Commiting into database:", obj, obj.birthday, obj.breed)
     session = db.create_session()
     try:
         if obj.id is None:
+            session.add(obj)
+        else:
             session.add(obj)
         session.commit()
     finally:
@@ -61,17 +65,31 @@ def insert(obj):
     return obj
 
 
-def insert_pet(name, breed, owner,
+def commit_pet(name: str, breed_id: str, owner_id: str,
                pet_id=None,
                birthday=None,
                breeder=None,
                summary=None,
                image_url=None) -> Pet:
+    """
+    Commit pet data into database.
+    @param name: Pet name used in url routing
+    @param breed_id:
+    @param owner_id:
+    @param pet_id:
+    @param birthday:
+    @param breeder:
+    @param summary:
+    @param image_url:
+    @return:
+    """
     pet = get_pet(pet_id)
     pet.name = name
-    pet.breed = breed
-    pet.owner = owner
-    pet.birthday = birthday
+    if pet.breed.id != int(breed_id):
+        pet.breed = get_breed(breed_id)
+    if pet.owner.id != int(owner_id):
+        pet.owner = user_service.get_user(owner_id)
+    pet.birthday = birthday if birthday != "" else None
     pet.breeder = breeder
     pet.summary = summary
     pet.image_url = image_url

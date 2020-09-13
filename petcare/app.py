@@ -20,8 +20,10 @@ def setup_db(db_path):
 def register_blueprints():
     from petcare.views import timeviews
     from petcare.views import petviews
+    from petcare.views import home_views
 
     app.register_blueprint(timeviews.blueprint)
     app.register_blueprint(petviews.blueprint)
+    app.register_blueprint(home_views.blueprint)
 
 main()
