@@ -1,0 +1,41 @@
+{% extends "_layout.html" %}
+{% block main_content %}
+    <table>
+        <h1>{{ month }}</h1>
+        <tr class="cal-head">
+            <th class="cal-head">Ma</th>
+            <th class="cal-head">Ti</th>
+            <th class="cal-head">Ke</th>
+            <th class="cal-head">To</th>
+            <th class="cal-head">Pe</th>
+            <th class="cal-head">La</th>
+            <th class="cal-head">Su</th>
+        </tr>
+        <tbody>
+        {% set daycount = namespace(value=1) %}
+        {% for i in range(5) %}
+            <tr class="cal-row">
+                {% for j in range(7) %}
+                    <td class="cal-col">
+                        <input type="hidden" name="date_day" value="{{ year }}-{{ month }}-{{ daycount.value }}">
+                        {% if i == 0 and month_start <= j %}
+                            {{ daycount.value }}
+                            {% set daycount.value = daycount.value + 1 %}
+                        {% elif i > 0 and daycount.value <= month_end %}
+                            {{ daycount.value }}
+                            {% set daycount.value = daycount.value + 1 %}
+                        {% endif %}
+                        {% if events[(month, daycount.value)] %}
+                            <ul>
+                                {% for event in events[(month, daycount.value)] %}
+                                    <li>{{ event["title"] }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

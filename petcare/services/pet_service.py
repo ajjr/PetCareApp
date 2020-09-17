@@ -57,7 +57,7 @@ def insert(obj):
         if obj.id is None:
             session.add(obj)
         else:
-            session.add(obj)
+            session.merge(obj)
         session.commit()
     finally:
         session.close()
@@ -83,12 +83,19 @@ def commit_pet(name: str, breed_id: str, owner_id: str,
     @param image_url:
     @return:
     """
+    print("***********************************************", pet_id)
     pet = get_pet(pet_id)
     pet.name = name
-    if pet.breed.id != int(breed_id):
-        pet.breed = get_breed(breed_id)
-    if pet.owner.id != int(owner_id):
-        pet.owner = user_service.get_user(owner_id)
+    breed = get_breed(breed_id)
+    if pet.breed is None:
+        pet.breed = breed
+    elif pet.breed.id != breed.id:
+        pet.breed = breed
+
+    owner = user_service.get_user(owner_id)
+    if pet.owner is None or pet.owner.id != owner.id:
+        pet.owner = owner
+
     pet.birthday = birthday if birthday != "" else None
     pet.breeder = breeder
     pet.summary = summary

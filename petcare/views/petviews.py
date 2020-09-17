@@ -26,7 +26,7 @@ def pet(pet_name=None):
         "name": "",
         "id": ""
     }
-    pet_id = None
+    pet_id = ""
     if pet_name is not None:
         (a_pet, user) = pet_service.get_pet_by_name(pet_name, 3)
         pet_id = a_pet.id
@@ -69,7 +69,8 @@ def post_pet():
     breed = pet_service.get_breed(request.form["breed_id"])
     owner = user_service.get_user(3)
     a_pet = None
-    if "pet_id" not in request.form.keys():
+    pet_data["pet_id"] = request.form["pet_id"].strip()
+    if "pet_id" not in request.form.keys() or request.form["pet_id"] != "":
         print("Insetrting new pet with {} and {}".format(breed.name, owner.name))
         a_pet = pet_service.commit_pet(**pet_data)
     else:
