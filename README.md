@@ -1,6 +1,15 @@
 # PetCareApp, ehdotus
 PetCareAppin avulla on tarkoitus pitää kirjaa oman lemmikkieläimen hoitotoimenpiteistä ja hyvinvointiin liittyvistä tapahtumista. Se koostuu päivä-, viikko- ja kuukausinäkymistä, jotka näyttävät päivittäin, viikoittain tai kuukausittain toistuvat toimenpiteet. Tällaisia toimenpiteitä eräiden koirarotujen kohdalla voivat olla esim. trimmaus, pesu ja kynsien leikkuu. Jos eläimelle määrätään lääkekuuri, päivittäisiä toimenpiteitä ovat lääkkeen annostelu ja syöttäminen. Lisäksi sovellukseen pitäisi voida kirjata eläimen päivittäinen ruokavalio. Tämä voidaan yhdistää terveyteen liittyviin tapahtumiin kuten esim. yllättävään ripuliin, jolloin omistaja voi tehdä päätelmiä ruokavalion ja/tai lääkkeiden sopivuudesta lemmikilleen.
 
+## Asennus
+1. Asenna jokin tietokanta.
+2. Kloonaa tämä repositorio ja luo juurihakemistoon virtual environment:
+```python -m venv venv```
+3. Asenna riippuvuudet requirements.txt -tiedoston avulla.
+4. Aseta muuttujaan PETCARE_DB_URI tietokannan yhteysosoite.
+5. Aja Flask. Sovellus luo käynnistyessään tietokantaan tarvitsemansa taulut automaattisesti.
+
+
 ## Käsitteitä
 <table>
 <tbody>
