@@ -37,6 +37,11 @@ tr.cal-head {
   height: 20px;
 }
 
+td.cal-col {
+  width: 100px;
+  font-size: smaller;
+}
+
 tr:nth-child(even) {
   background-color: #f2f2f2
 }
@@ -47,7 +52,8 @@ th {
 }
 
 h1 {
-  text-align: center;
+  text-align: left;
+  margin-left: 4%;
 }
 
 textarea {
@@ -65,4 +71,10 @@ textarea {
 
 input.pet-name {
   border-style: hidden;
+}
+
+ul.cal-event {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
 }

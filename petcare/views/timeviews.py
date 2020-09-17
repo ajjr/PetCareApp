@@ -72,6 +72,7 @@ def month(date_day=None):
     a_year = a_date.year
     a_day = a_date.day
     month_start, month_end = monthrange(a_year, a_month)
+    formatted_date = str(a_date.year) + "-" + ("0" + str(a_date.month))[-2:] + "-"
 
     events = event_service.get_events_between(datetime.datetime(a_year, a_month, month_start),
                                               datetime.datetime(a_year, a_month, month_end),
@@ -90,4 +91,4 @@ def month(date_day=None):
     print(events)
 
     return flask.render_template("month.html", year=a_year, month=a_month, day=a_day, month_start=month_start,
-                                 month_end=month_end, events=event_dict)
+                                 month_end=month_end, events=event_dict, date_stub=formatted_date)

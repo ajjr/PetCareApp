@@ -19,14 +19,15 @@
                     <td class="cal-col">
                         <input type="hidden" name="date_day" value="{{ year }}-{{ month }}-{{ daycount.value }}">
                         {% if i == 0 and month_start <= j %}
-                            {{ daycount.value }}
+                            <a href="/day/{{ date_stub }}0{{ daycount.value }}">{{ daycount.value }}</a>
                             {% set daycount.value = daycount.value + 1 %}
                         {% elif i > 0 and daycount.value <= month_end %}
-                            {{ daycount.value }}
+                            <a href="/day/
+                                    {{ date_stub }}{% if daycount.value < 10 %}0{% endif %}{{ daycount.value }}">{{ daycount.value }}</a>
                             {% set daycount.value = daycount.value + 1 %}
                         {% endif %}
                         {% if events[(month, daycount.value)] %}
-                            <ul>
+                            <ul class="cal-event">
                                 {% for event in events[(month, daycount.value)] %}
                                     <li>{{ event["title"] }}</li>
                                 {% endfor %}
