@@ -46,10 +46,14 @@ def day(date_day):
     if date_day is None:
         date_day = str(datetime.date.today())
     day_ = datetime.date.fromisoformat(date_day)
+    user_id = 3
     # Display events for day_
-    next_events = get_next_events()
+    # next_events = get_next_events()
+    events = event_service.get_events_between(day_ - datetime.timedelta(days=1), day_ + datetime.timedelta(days=1),
+                                              user_id)
+    print(events)
     return flask.render_template("day.html", today=datetime.date.today().ctime(), day_str=day_.ctime(),
-                                 next_events=next_events)
+                                 next_events=events[(day_.month, day_.day)])
 
 
 @blueprint.route("/week")
@@ -78,17 +82,9 @@ def month(date_day=None):
                                               datetime.datetime(a_year, a_month, month_end),
                                               user_id)
 
-    event_dict = defaultdict(list)
-    for event in events:
-        event_dict[(event.date.month, event.date.day)].append({
-            "title": event.description,
-            "pet_name": event.pet.name,
-            "pet_id": event.pet_id,
-            "event_id": event.id
-        })
         # event_dict[(event.date.month, event.date.day)] = el
 
     print(events)
 
     return flask.render_template("month.html", year=a_year, month=a_month, day=a_day, month_start=month_start,
-                                 month_end=month_end, events=event_dict, date_stub=formatted_date)
+                                 month_end=month_end, events=events, date_stub=formatted_date)

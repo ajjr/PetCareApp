@@ -1,3 +1,4 @@
+from collections import defaultdict
 from typing import Optional, List
 from petcare.models.event import Event
 from petcare.models.operation import Operation
@@ -33,4 +34,14 @@ def get_events_between(start_date, end_date, user_id):
     finally:
         session.close()
 
-    return events
+    print(events)
+    event_dict = defaultdict(list)
+    for event in events:
+        event_dict[(event.date.month, event.date.day)].append({
+            "title": event.description,
+            "pet_name": event.pet.name,
+            "pet_id": event.pet_id,
+            "event_id": event.id
+        })
+
+    return event_dict
