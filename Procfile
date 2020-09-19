@@ -1,1 +1,1 @@
-web: gunicorn petcareapp.wsgi --log-file -
+web: gunicorn petcare.app --log-file -
