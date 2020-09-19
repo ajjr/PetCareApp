@@ -70,8 +70,8 @@ def month(date_day=None):
     user_id = 3
 
     if date_day is None:
-        date_day = str(datetime.datetime.today())
-    a_date = datetime.datetime.fromisoformat(date_day)
+        date_day = str(datetime.date.today())
+    a_date = datetime.date.fromisoformat(date_day)
     a_month = a_date.month
     a_year = a_date.year
     a_day = a_date.day
