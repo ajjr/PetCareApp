@@ -1,6 +1,5 @@
 import datetime
 from calendar import monthrange
-from collections import defaultdict
 
 import flask
 
@@ -59,13 +58,20 @@ def day(date_day):
 @blueprint.route("/week")
 @blueprint.route("/week/<string:date_day>")
 def week(date_day=None):
+    user_id = 3
+
     if date_day is None:
         date_day = str(datetime.date.today())
     a_date = datetime.date.fromisoformat(date_day)
     start_of_week = a_date.day - a_date.weekday()
     a_year, a_week, day_of_week = a_date.isocalendar()
 
-    return flask.render_template("week.html", start_of_week=start_of_week, year=a_year, week=a_week, day_of_week=day_of_week)
+    events = event_service.get_events_between(datetime.datetime(a_year, a_date.month, start_of_week),
+                                              datetime.datetime(a_year, a_date.month, start_of_week + 7),
+                                              user_id)
+
+    return flask.render_template("week.html", start_of_week=start_of_week, year=a_year, month=a_date.month, week=a_week,
+                                 day_of_week=day_of_week, events=events)
 
 
 @blueprint.route("/month")
@@ -86,7 +92,7 @@ def month(date_day=None):
                                               datetime.datetime(a_year, a_month, month_end),
                                               user_id)
 
-        # event_dict[(event.date.month, event.date.day)] = el
+    # event_dict[(event.date.month, event.date.day)] = el
 
     print(events)
 

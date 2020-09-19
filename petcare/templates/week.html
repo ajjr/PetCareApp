@@ -1,7 +1,7 @@
 {% extends "_layout.html" %}
 {% block main_content %}
     <table>
-        <h1>{{ month }}</h1>
+        <h1>{{ week }}</h1>
         <tr class="cal-head">
             <th class="cal-head">Ma</th>
             <th class="cal-head">Ti</th>
@@ -15,7 +15,16 @@
         {% set daycount = namespace(value=1) %}
         <tr>
           {% for i in range(7) %}
-              <td>{{ start_of_week + i }}</td>
+              <td><a href="/day/{{ year }}-{%
+                      if month < 10 %}0{%
+                      endif %}{{ month }}-{%
+                      if start_of_week + i < 10 %}0{%
+                      endif %}{{ start_of_week + i }}">{{ start_of_week + i }}</a><br />
+               {% if events[(month, start_of_week + i)] %}<ul class="cal-event">
+                                {% for event in events[(month, start_of_week + i)] %}
+                                    <li>{{ event["title"] }}</li>
+                                {% endfor %}
+                            </ul>{% endif %}</td>
           {% endfor %}
         </tr>
         </tbody>
