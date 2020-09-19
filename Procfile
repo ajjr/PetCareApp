@@ -1,1 +1,1 @@
-web: gunicorn petcare.app --log-file -
+web: gunicorn petcare.app:app --log-file -

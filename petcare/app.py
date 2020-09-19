@@ -26,4 +26,6 @@ def register_blueprints():
     app.register_blueprint(petviews.blueprint)
     app.register_blueprint(home_views.blueprint)
 
-main()
+
+if __name__ == "__main__":
+    main()
