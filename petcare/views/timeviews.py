@@ -61,7 +61,11 @@ def day(date_day):
 def week(date_day=None):
     if date_day is None:
         date_day = str(datetime.date.today())
-    week_ = datetime.date.fromisoformat(date_day).isocalendar()
+    a_date = datetime.date.fromisoformat(date_day)
+    start_of_week = a_date.day - a_date.weekday()
+    a_year, a_week, day_of_week = a_date.isocalendar()
+
+    return flask.render_template("week.html", start_of_week=start_of_week, year=a_year, week=a_week, day_of_week=day_of_week)
 
 
 @blueprint.route("/month")

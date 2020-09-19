@@ -1,0 +1,23 @@
+{% extends "_layout.html" %}
+{% block main_content %}
+    <table>
+        <h1>{{ month }}</h1>
+        <tr class="cal-head">
+            <th class="cal-head">Ma</th>
+            <th class="cal-head">Ti</th>
+            <th class="cal-head">Ke</th>
+            <th class="cal-head">To</th>
+            <th class="cal-head">Pe</th>
+            <th class="cal-head">La</th>
+            <th class="cal-head">Su</th>
+        </tr>
+        <tbody>
+        {% set daycount = namespace(value=1) %}
+        <tr>
+          {% for i in range(7) %}
+              <td>{{ start_of_week + i }}</td>
+          {% endfor %}
+        </tr>
+        </tbody>
+    </table>
+{% endblock %}

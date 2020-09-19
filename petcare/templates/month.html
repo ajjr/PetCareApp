@@ -23,7 +23,10 @@
                             <a href="/day/{{ date_stub }}0{{ daycount.value }}">{{ daycount.value }}</a>
                             {% set daycount.value = daycount.value + 1 %}
                         {% elif i > 0 and daycount.value <= month_end %}
-                            <a href="/day/{{ date_stub }}{% if daycount.value < 10 %}0{% endif %}{{ daycount.value }}">{{ daycount.value }}</a>
+                            <a href="/day/{{ date_stub }}{%
+                                    if daycount.value < 10
+                                    %}0{%
+                                    endif %}{{ daycount.value }}">{{ daycount.value }}</a>
                             {% set daycount.value = daycount.value + 1 %}
                         {% endif %}
                         {% if events[(month, today)] %}
