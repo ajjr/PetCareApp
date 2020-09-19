@@ -7,15 +7,33 @@ from petcare.models.species import Species
 
 def main():
     init_db()
+    sps_dog, sps_cat = insert_species()
     insert_operations(read_input_file("../data/operaatiot.txt"))
-    insert_dog_breeds(read_input_file("../data/koirarodut.txt"))
-    insert_cat_breeds(read_input_file("../data/kissarodut.txt"))
+    insert_dog_breeds(read_input_file("../data/koirarodut.txt"), sps_dog)
+    insert_cat_breeds(read_input_file("../data/kissarodut.txt"), sps_cat)
 
 
 def read_input_file(file_path: str):
     with open(file_path, "r") as fin:
         data = fin.readlines()
     return data
+
+
+def insert_species():
+    session = db.create_session()
+    dog = Species()
+    dog.name = "koira"
+    session.add(dog)
+    cat = Species()
+    cat.name = "kissa"
+    session.add(cat)
+    session.commit()
+
+    sps_dog = dog.id
+    sps_cat = cat.id
+    session.close()
+
+    return sps_dog, sps_cat
 
 
 def insert_operations(data):
@@ -60,5 +78,5 @@ def init_db():
     db_path = Config.DATABASE_URI
     db.global_init(db_path)
 
-
-main()
+if __name__ == "__main__":
+    main()
