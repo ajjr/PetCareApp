@@ -1,3 +1,4 @@
+print("This is", __name__)
 import flask
 
 import petcare.models.db_session as db_session
@@ -7,10 +8,14 @@ app = flask.Flask(__name__)
 
 
 def main():
+    configure()
+    app.run(debug=True)
+
+
+def configure():
     config = Config()
     setup_db(config.DATABASE_URI)
     register_blueprints()
-    app.run(debug=True)
 
 
 def setup_db(db_path):
@@ -29,3 +34,5 @@ def register_blueprints():
 
 if __name__ == "__main__":
     main()
+else:
+    configure()
