@@ -1,36 +1,114 @@
-# PetCareApp, ehdotus
+# PetCareApp
 PetCareAppin avulla on tarkoitus pitää kirjaa oman lemmikkieläimen hoitotoimenpiteistä ja hyvinvointiin liittyvistä tapahtumista. Se koostuu päivä-, viikko- ja kuukausinäkymistä, jotka näyttävät päivittäin, viikoittain tai kuukausittain toistuvat toimenpiteet. Tällaisia toimenpiteitä eräiden koirarotujen kohdalla voivat olla esim. trimmaus, pesu ja kynsien leikkuu. Jos eläimelle määrätään lääkekuuri, päivittäisiä toimenpiteitä ovat lääkkeen annostelu ja syöttäminen. Lisäksi sovellukseen pitäisi voida kirjata eläimen päivittäinen ruokavalio. Tämä voidaan yhdistää terveyteen liittyviin tapahtumiin kuten esim. yllättävään ripuliin, jolloin omistaja voi tehdä päätelmiä ruokavalion ja/tai lääkkeiden sopivuudesta lemmikilleen.
 
 ## Asennus
+
+### Kehitysympäristöön
 1. Asenna jokin tietokanta.
 2. Kloonaa tämä repositorio ja luo juurihakemistoon virtual environment:
-```python -m venv venv```
-3. Asenna riippuvuudet requirements.txt -tiedoston avulla.
+    ```
+    $ git clone https://github.com/ajjr/PetCareApp
+    $ cd PetCareApp
+    $ python -m venv venv
+    ```
+3. Asenna riippuvuudet requirements.txt -tiedoston avulla:
+    ```
+    $ pip install -r requirements.txt
+    ```
 4. Aseta muuttujaan PETCARE_DB_URI tietokannan yhteysosoite.
-5. Aja Flask. Sovellus luo käynnistyessään tietokantaan tarvitsemansa taulut automaattisesti.
+5. Aja Flask. Sovellus luo käynnistyessään tietokantaan tarvitsemansa taulut automaattisesti:
+    ```
+    $ cd petcare
+    $ flask run
+    ```
+6. Palaa PetCareApp -hakemistoon ja lataa tietokannan alustustieto tietokantaan:
+    ```
+    $ cd util
+    $ python load_data.py
+    ```
+7. Sovelluksen pitäisi nyt olla käyttövalmis. Voit kuitenkin vielä käynnistää sen uudestaan.
 
+### Herokuun
+1. Luo itsellesi Heroku-tunnukset ja asenna Herokun komentorivityökalu
+2. Kloonaa tämä repositorio:
+    ```
+    $ git clone https://github.com/ajjr/PetCareApp
+    $ cd PetCareApp
+    ```
+3. Luo Heroku-sovellus:
+    ```
+    $ heroku create
+    ```
+   Oletuksena Heroku sijoittaa sovelluksen Pohjois-Amerikkaan. Jos haluat sijoittaa sen Eurooppaan, anna komennolle parametri *--region=eu*:
+    ```
+    $ heroku create --region=eu
+    ```
+4. Jos sinulla ei ole vielä Heroku-palvelun ilmaiseen tasoon kuuluvaa Postgres-tietokantaa, ota se käyttöön nyt ja anna juuri luomallesi sovellukselle resurssiksi. Heroku luo Postgresiin oletuskäyttäjän ja settaa sovellukselle config-muuttujan *DATABASE_URL* joka sisältää tietokannan yhteyspolun. PetCareApp käyttää muuttujaa *PETCARE_DB_URI*, johon on asetettava sama arvo, uin *DATABASE_URL* -muuttujalla.
+
+   Tee tämä muutos Web-käyttöliittymässä tai komennolla:
+   ```
+   $ heroku config:set PETCARE_DB_URI [tietokannan polku]
+   ```
+5. Vie git-repositorio Herokuun:
+    ```
+    $ git push heroku master
+    ```
+    tai
+    ```
+    $ git push heroku main
+    ```
+6. Tässä vaiheessa sovelluksen pitäisi käynnistyä. Se luo automaattisesti itselleen tietomallin, mutta ei osaa ladata tarvitsemaansa alustusdataa tietokantaan. Jotta sovellusta voisi käyttää, nämä tiedot on ladattava käsin. Tämä tapahtuu käynnistämällä sovelluksensisäinen bash ja ajamalla latausskripti:
+    ```
+    $ heroku run bash
+    Running bash on ⬢ random-appname... up, run.1234 (Free) 
+    ~ $ cd util/
+    ~/util $ python load_data.py
+   [tässä tulosteessa ei pitäisi näkyä virheilmoituksia]
+    ~/util $ exit
+   Ctrl^C
+   ```
+7. Käynnistä sovellus uudestaan. Voit tehdä sen joko Herokun web-käyttöliittymästä tai komennolla *heroku restart web.\[n]*, jossa n on web-prosessin numero. Esim:
+    ```
+    $ heroku restart web.1
+    ```
+
+## Nykytila
+- Päivä-, viikko- ja kuukausinäkymät toimivat ja hakevat tietokannasta kullekin päivällä kuuluvat tapahtumat.
+- Lemmikkejä on mahdollista lisätä tietokantaan ja muuttaa niiden tietoja.
+- Lemmikin tiedot voi hakea lomakkeelle surffaamalla osoitteeseen */pet/[PET_NAME]*. Esim. */pet/Haukku* näyttää kirjautuneen käyttäjän Haukku-nimisen lemmikin tiedot.
+- Virheenkäsittely on tällä hetkellä olematonta. Esimerkiksi hakemalla tietokannasta puuttuvaa lemmikkiä, tuottaa TypeError poikkeustilanteen, jota ei käsitellä.
+- Käyttähallintaa ei ole toteutettu. Oletususerid on kaikissa operaatioissa 3 ja sovellus odottaa, että sille tunnukselle on olemassa käyttäjä.
+
+## Seuraavaksi
+- Käyttäjän rekisteröityminen ja tunnistaminen
+- Virheenhallinta: virheellisen syötteen nappaaminen ja tietokannan nollahauista toipuminen
+- Tapahtuman ja tehtävän lisääminen
 
 ## Käsitteitä
-<table>
-<tbody>
-<tr><td>eläin, lemmikki</td><td>Käsitteellisesti eläimellä ja lemmikillä ei ole tämän sovelluksen kannalta eroa. Käytännössä oliot ja taulut nimetään etuliitteellä Pet.</td></tr>
-<tr><td>käyttäjä</td><td>Eläimen omistaja, toimenpiteen suorittaja tai tapahtuman kirjaaja. Sidottu käyttäjätunnukseen, jonka avulla käyttäjä tunnistetaan ja käyttöoikeus varmistetaan.</td></tr>
-<tr><td>tapahtuma</td><td>Yksittäinen eläimelle sattunut tapahtuma, joka voi olla etukäteen suunniteltu, mutta yleensä jälkikäteen kirjattava yllättävä tapahtuma.</td></tr>
-<tr><td>toimenpide</td><td>Aikataulutettu tapahtuma, jossa eläin on omistajan valtuuttaman toimenpiteen kohteen. Esim. trimmaus tai eläinlääkärissä toteutettu verinäyte.</td></tr>
-</tbody>
-</table>
+| käsite    | synonyymi | tietomallinimi    | kommentti |
+|-----------|-----------|-------------------|-----------|
+| lemmikki  | eläin     | Pet               |
+| laji      | eläinlaji | Species           |
+| rotu      | alalaji   | Breed             | Käytännössä kissa- tai koirarotu, mutta voi tarkoittaa myös esim. kilpikonnalajia. |
+| tapahtuma |           | Event             | Konkreettinen tapahtuma, jolle voidaan osoittaa ajankohta. Voi sijoittua tulevaisuuteen tai menneisyyteen. |
+| tehtävätyyppi   | operaatio, toimenpidetyyppi | Operation | Tehtävät |
+| tehtävä | toimenpide  | OperationInstance | Suunniteltu tai toteutettu tehtävä, jolle on määrätty ajankohta. Tämä tekee tehtävästä tapahtuman, joka määrää sen ajankohdan. |
+| käyttäjä | omistaja   | User              | Käyttäjä luodaan rekisteröitymällä. Jokaisen lemmikin omistaja on käyttäjä ja jokaiseen tapahtumaan liittyy käyttäjä. | 
+
 
 ## Näkymät ja reititykset
-Aion toteuttaa ainakin kolme vakionäkymää, jotka saavat oman URL-reitityksen (esim. /month/):
+Toteutetut:
 - Päivänäkymä
 - Viikkonäkymä
 - Kuukausinäkymä
+- Lemmikki
 
-Kukin edellämainituista näyttää näkymän mukaiset toimenpiteet käynnissä olevalle ajanjaksolle. Tarkoitukseni on toteuttaa nämä näkymät parametriohjattuina siten, että (esim. muotoa /month/<year-month>) näyttää annetun aikajakson, mutta ilman parametriä meneillään olevan jakson.
-
-Lisäksi aion toteuttaa lemmikinhallintanäkymän (/pet/<pet_name>), jonka avulla käyttäjä voi lisätä lemmikin ja hallita tämän tietoja. Samassa näkymässä on myös luettelo eläimen viimeisimmistä tapahtumista ja toimenpiteistä.
-
-Kolmanneksi voisin vielä toteuttaa käyttäjänhallintanäkymän, jonka avulla voidaan ainakin lisätä käyttäjä. 
+Suunnitellut:
+- Käyttäjän rekisteröityminen
+- Sisäänkirjautuminen
+- Tapahtuman lisääminen
+- Tehtävän lisääminen
+- Toistuvan tehtävän lisääminen
 
 ## Tavoite 18.10.
 Tavoitteena 18.10. minulla on MVP, jolla on mahdollista:

@@ -3,6 +3,7 @@ import petcare.models.db_session as db
 from petcare.models.operation import Operation
 from petcare.models.breed import Breed
 from petcare.models.species import Species
+from petcare.models.user import User
 
 
 def main():
@@ -17,6 +18,18 @@ def read_input_file(file_path: str):
     with open(file_path, "r") as fin:
         data = fin.readlines()
     return data
+
+
+def insert_test_user(username="Test User"):
+    session = db.create_session()
+    user = User()
+    user.id = 3 # TODO: Get rid of magic user id
+    user.username = username
+    user.email = "fake"
+    user.password = "this will be hashed"
+    session.add(user)
+    session.commit()
+    session.close()
 
 
 def insert_species():
