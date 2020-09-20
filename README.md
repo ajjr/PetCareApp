@@ -1,7 +1,7 @@
 # PetCareApp
 PetCareAppin avulla on tarkoitus pitää kirjaa oman lemmikkieläimen hoitotoimenpiteistä ja hyvinvointiin liittyvistä tapahtumista. Se koostuu päivä-, viikko- ja kuukausinäkymistä, jotka näyttävät päivittäin, viikoittain tai kuukausittain toistuvat toimenpiteet. Tällaisia toimenpiteitä eräiden koirarotujen kohdalla voivat olla esim. trimmaus, pesu ja kynsien leikkuu. Jos eläimelle määrätään lääkekuuri, päivittäisiä toimenpiteitä ovat lääkkeen annostelu ja syöttäminen. Lisäksi sovellukseen pitäisi voida kirjata eläimen päivittäinen ruokavalio. Tämä voidaan yhdistää terveyteen liittyviin tapahtumiin kuten esim. yllättävään ripuliin, jolloin omistaja voi tehdä päätelmiä ruokavalion ja/tai lääkkeiden sopivuudesta lemmikilleen.
 
-Sovellus on asennettu Herokuun osoitteessa: https://thawing-harbor-87016.herokuapp.com. Tämä asennus päivittyy automaattisesti vastaamaan tämän Git-repositorion tilaa.
+Sovellus on asennettu Herokuun osoitteessa: https://thawing-harbor-87016.herokuapp.com. Tämä asennus päivittyy automaattisesti vastaamaan tämän Git-repositorion tilaa. Kokeile esim. lisätä lemmikki osoitteessa https://thawing-harbor-87016.herokuapp.com/pet ja sitten hakea lemmikin tiedot osoitteella https://thawing-harbor-87016.herokuapp.com/pet/[lemmikin nimi] Tai sitten voit hakea Rottiksen tiedot osoitteesta https://thawing-harbor-87016.herokuapp.com/pet/Rottis ja muokata sen tietoja. En tiedä, mitä tapahtuu, jos muuttaa lemmikin nimeä, mutta sitäkin kannattaa kokeilla. Toivon mukaan se lataa saman lemmikkitietueen uudella nimellä ja osoitteella.
 
 ## Asennus
 
