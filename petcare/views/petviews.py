@@ -70,15 +70,16 @@ def pet_post():
     if not user_id:
         return flask.redirect("/login", code=302)
 
-    pet_data = {
-        "name": request.form["pet_name"].strip(),
-        "breed_id": request.form["breed_id"].strip(),
-        "owner_id": user_id,
-        "birthday": request.form["pet_birthday"].strip(),
-        "breeder": request.form["breeder"].strip(),
-        "summary": request.form["pet_summary"].strip(),
-        "image_url": request.form["pet_image_url"].strip()
-    }
+    pet_data = {"name": request.form["pet_name"].strip(), "breed_id": request.form["breed_id"].strip(),
+                "owner_id": user_id, "birthday": request.form["pet_birthday"].strip(),
+                "breeder": request.form["breeder"].strip(), "summary": request.form["pet_summary"].strip(),
+                "image_url": request.form["pet_image_url"].strip(), "pet_id": request.form["pet_id"].strip()}
+
+    if "delete" in request.form.keys():
+        print("Delete requested for {}".format(pet_data["name"], pet_data["pet_id"]))
+        # Perform delete
+        pet_service.delete_pet(pet_data["pet_id"])
+        return flask.redirect("/profile", code=302)
 
     breed = pet_service.get_breed(request.form["breed_id"])
     owner = user_service.get_user(user_id)

@@ -75,6 +75,16 @@ def insert(obj):
     return obj
 
 
+def delete_pet(pet_id):
+    session = db.create_session()
+    try:
+        pet = db.get_db_obj(pet_id, Pet)
+        session.delete(pet)
+        session.commit()
+    finally:
+        session.close()
+
+
 def commit_pet(name: str, breed_id: str, owner_id: str,
                pet_id=None,
                birthday=None,
