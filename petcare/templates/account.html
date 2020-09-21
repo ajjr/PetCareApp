@@ -1,0 +1,19 @@
+{% extends "_layout.html" %}
+{% block main_content %}
+    <div class="form-container">
+        <form action="" method="POST" class="account-form">
+            <h1>Rekisteröidy käyttäjäksi</h1>
+            <input name="username" type="text" placeholder="Käyttäjätunnus" value="{{ username }}" class="form-control">
+            <input name="name" type="text" placeholder="Nimi" value="{{ name }}" class="form-control">
+            <input name="email" type="text" placeholder="Sähköpostiosoite" value="{{ email }}" class="form-control">
+            <input name="password" type="password" placeholder="Password" class="form-control">
+            <input type="submit" value="Tallenna" class="btn btn-primary">
+            {% if error %}
+            <div class="account-message">{{ error }}</div>
+            {% endif %}
+        </form>
+    </div>
+    <div class="login-messages">
+
+    </div>
+{% endblock %}

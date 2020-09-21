@@ -1,3 +1,5 @@
+from typing import List
+
 import petcare.models.db_session as db
 from petcare.models.db_session import get_db_obj
 from petcare.models.pet import Pet
@@ -50,8 +52,16 @@ def get_pet_by_name(pet_name, owner_id) -> Pet:
     return pet
 
 
+def get_pets_for_user(user_id):
+    session = db.create_session()
+    return session.query(Pet, Breed, Species).select_from(Pet).\
+        join(Breed).\
+        join(Species).\
+        filter(Pet.user_id == user_id).order_by(Species.id).all()
+
+
 def insert(obj):
-    print("--Commiting into database:", obj, obj.birthday, obj.breed)
+    print("--Commiting into database:", obj, obj.birthday, obj.breed, obj.owner)
     session = db.create_session()
     try:
         if obj.id is None:

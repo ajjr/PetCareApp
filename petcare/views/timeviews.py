@@ -4,6 +4,7 @@ from calendar import monthrange
 import flask
 
 import petcare.services.event_service as event_service
+from petcare.services import auth_cookie
 
 blueprint = flask.Blueprint("time", __name__, template_folder="templates")
 
@@ -42,6 +43,10 @@ def get_next_events():
 @blueprint.route("/day", defaults={"date_day": None})
 @blueprint.route("/day/<string:date_day>")
 def day(date_day):
+    user_id = auth_cookie.get_auth(flask.request)
+    if not user_id:
+        return flask.redirect("/login", code=302)
+
     if date_day is None:
         date_day = str(datetime.date.today())
     day_ = datetime.date.fromisoformat(date_day)
@@ -52,13 +57,15 @@ def day(date_day):
                                               user_id)
     print(events)
     return flask.render_template("day.html", today=datetime.date.today().ctime(), day_str=day_.ctime(),
-                                 next_events=events[(day_.month, day_.day)])
+                                 next_events=events[(day_.month, day_.day)], user_id=user_id)
 
 
 @blueprint.route("/week")
 @blueprint.route("/week/<string:date_day>")
 def week(date_day=None):
-    user_id = 3
+    user_id = auth_cookie.get_auth(flask.request)
+    if not user_id:
+        return flask.redirect("/login", code=302)
 
     if date_day is None:
         date_day = str(datetime.date.today())
@@ -71,13 +78,15 @@ def week(date_day=None):
                                               user_id)
 
     return flask.render_template("week.html", start_of_week=start_of_week, year=a_year, month=a_date.month, week=a_week,
-                                 day_of_week=day_of_week, events=events)
+                                 day_of_week=day_of_week, events=events, user_id=user_id)
 
 
 @blueprint.route("/month")
 @blueprint.route("/month/<string:date_day>")
 def month(date_day=None):
-    user_id = 3
+    user_id = auth_cookie.get_auth(flask.request)
+    if not user_id:
+        return flask.redirect("/login", code=302)
 
     if date_day is None:
         date_day = str(datetime.date.today())
@@ -97,4 +106,4 @@ def month(date_day=None):
     print(events)
 
     return flask.render_template("month.html", year=a_year, month=a_month, day=a_day, month_start=month_start,
-                                 month_end=month_end, events=events, date_stub=formatted_date)
+                                 month_end=month_end, events=events, date_stub=formatted_date, user_id=user_id)

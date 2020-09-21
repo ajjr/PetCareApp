@@ -1,19 +1,26 @@
+from datetime import datetime
+
 import flask
 from flask import request
 from flask import redirect
 import petcare.services.pet_service as pet_service
 import petcare.services.user_service as user_service
+from petcare.services import auth_cookie
 
 blueprint = flask.Blueprint("pet", __name__, template_folder="templates")
 
 
 @blueprint.route("/pet", methods=["GET"])
 @blueprint.route("/pet/<string:pet_name>")
-def pet(pet_name=None):
+def pet_get(pet_name=None):
+    user_id = auth_cookie.get_auth(flask.request)
+    if not user_id:
+        return flask.redirect("/login", code=302)
+
     pet_data = {
         "name": "",
         "birthday": "",
-        "owner": "",
+        "owner": user_service.get_user(user_id).name,
         "breeder": "",
         "summary": "",
         "image_url": ""
@@ -28,15 +35,18 @@ def pet(pet_name=None):
     }
     pet_id = ""
     if pet_name is not None:
-        (a_pet, user) = pet_service.get_pet_by_name(pet_name, 3)
+        (a_pet, user) = pet_service.get_pet_by_name(pet_name, user_id)
+        today = datetime.today()
+        birthday = a_pet.birthday
         pet_id = a_pet.id
         pet_data = {
             "name": a_pet.name,
-            "birthday": a_pet.birthday,
-            "owner": user.id,
+            "birthday": birthday,
+            "owner": user.name,
             "breeder": a_pet.breeder,
             "summary": a_pet.summary,
-            "image_url": a_pet.image_url
+            "image_url": a_pet.image_url,
+            "age": today.year - birthday.year - ((today.month, today.day) < (birthday.month, birthday.day))
         }
         breed_data = {
             "name": a_pet.breed.id,
@@ -51,15 +61,19 @@ def pet(pet_name=None):
     species = pet_service.get_species()
     return flask.render_template("pet.html", pet_id=pet_id, pet_data=pet_data, species_data=sps_data,
                                  breed_data=breed_data,
-                                 breeds=breeds, species=species)
+                                 breeds=breeds, species=species, user_id=user_id)
 
 
 @blueprint.route("/pet", methods=["POST"])
-def post_pet():
+def pet_post():
+    user_id = auth_cookie.get_auth(flask.request)
+    if not user_id:
+        return flask.redirect("/login", code=302)
+
     pet_data = {
         "name": request.form["pet_name"].strip(),
         "breed_id": request.form["breed_id"].strip(),
-        "owner_id": "3",  # request.form["owner_id"].strip(),
+        "owner_id": user_id,
         "birthday": request.form["pet_birthday"].strip(),
         "breeder": request.form["breeder"].strip(),
         "summary": request.form["pet_summary"].strip(),
@@ -67,7 +81,7 @@ def post_pet():
     }
 
     breed = pet_service.get_breed(request.form["breed_id"])
-    owner = user_service.get_user(3)
+    owner = user_service.get_user(user_id)
     a_pet = None
     pet_data["pet_id"] = request.form["pet_id"].strip()
     if "pet_id" not in request.form.keys() or request.form["pet_id"] != "":

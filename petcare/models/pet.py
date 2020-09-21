@@ -25,6 +25,7 @@ class Pet(Base, ModelBase):
     deleted: bool = sa.Column(sa.DateTime)
 
     breed_id: int = sa.Column(sa.Integer, sa.ForeignKey("breed.id"))
+    #breed = orm.relation("Breed")
     breed = orm.relation("Breed", lazy="joined", join_depth=3)
 
     user_id: int = sa.Column(sa.Integer, sa.ForeignKey("users.id"))

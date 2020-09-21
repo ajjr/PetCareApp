@@ -1,0 +1,21 @@
+{% extends "_layout.html" %}
+{% block main_content %}
+    <div class="form-container">
+        <form action="" method="POST" class="account-form">
+            <h1>{{ username }}</h1>
+            {% for sps in species %}
+            {{ sps }}t
+                <ul>
+                {% for pet in pet_data[sps] %}
+                    <li> <a href="/pet/{{ pet.name }}" class="btn">{{ pet.name }}</a> {{ pet.breed }}</li>
+                {% endfor %}
+                </ul>
+            {% endfor %}
+
+        </form>
+        <a href="/pet" class="btn">Lisää lemmikki</a>
+    </div>
+    <div class="login-messages">
+
+    </div>
+{% endblock %}

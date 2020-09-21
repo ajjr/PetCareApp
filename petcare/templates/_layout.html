@@ -8,13 +8,16 @@
     <link rel="stylesheet" href="/static/css/site.css" />
 </head>
 <body>
+{% if user_id %}
 <nav>
     <a href="/">Etusivu</a>
     <a href="/day">Päivä</a>
     <a href="/week">Viikko</a>
     <a href="/month">Kuukausi</a>
-    <a href="/pet">Lisää lemmikki</a>
+    <a href="/profile">Profiili</a>
+    <a href="/logout">Kirjaudu ulos</a>
 </nav>
+{% endif %}
 <div class="main-content">
     {% block main_content %} {% endblock %}
 </div>
