@@ -1,0 +1,18 @@
+<form action="/insert_event" method="POST">
+    <div class="form-group">
+        <input type="date" name="event_date" class="form-control">
+        <input type="time" name="event_time" class="form-control">
+        <input type="text" name="event_description" class="form-control">
+        <label for="select_pet">
+                <select class="custom-select custom-select-sm" name="pet_id" id="select_pet_for_event">{% for pet in pet_data %}
+                    <option value="{{ pet.id }}" class="pet_list_option">{{ pet.name }}</option>{% endfor %}
+                </select></label>
+        <label for="select_operation">
+                <select class="custom-select custom-select-sm" name="operation_id" id="select_operation_for_event">
+                    <option></option>{% for operation in operations %}
+                    <option value="{{ operation.id }}" class="pet_list_option">{{ operation.id }}</option>{% endfor %}
+                </select></label>
+        <input type="text" name="operator" placeholder="Tekijä" class="form-control">
+        <input type="submit" name="insert_event" value="Lisää tapahtuma" class="btn">
+    </div>
+</form>

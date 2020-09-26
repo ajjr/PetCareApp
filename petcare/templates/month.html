@@ -32,7 +32,7 @@
                         {% if events[(month, today)] %}
                             <ul class="cal-event">
                                 {% for event in events[(month, today)] %}
-                                    <li>{{ event["title"] }}</li>
+                                    <li>{{ event["title"] }} {{ event["operation_name"] }}</li>
                                 {% endfor %}
                             </ul>
                         {% endif %}
@@ -42,4 +42,5 @@
         {% endfor %}
         </tbody>
     </table>
+    {% include "insert_event.html" %}
 {% endblock %}

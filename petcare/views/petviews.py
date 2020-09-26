@@ -75,6 +75,7 @@ def pet_post():
                 "breeder": request.form["breeder"].strip(), "summary": request.form["pet_summary"].strip(),
                 "image_url": request.form["pet_image_url"].strip(), "pet_id": request.form["pet_id"].strip()}
 
+    # Delete Pet
     if "delete" in request.form.keys():
         print("Delete requested for {}".format(pet_data["name"], pet_data["pet_id"]))
         # Perform delete

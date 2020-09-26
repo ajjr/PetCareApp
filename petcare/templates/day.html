@@ -7,7 +7,8 @@
     <h2></h2>
     <ul>
         {% for event in next_events %}
-            <li>{{ event["pet_name"] }}, {{ event["title"] }}</li>
+            <li>{{ event["pet_name"] }}, {{ event["title"] }} {{ event["operation_name"] }}</li>
         {% endfor %}
     </ul>
+    {% include "insert_event.html" %}
 {% endblock %}

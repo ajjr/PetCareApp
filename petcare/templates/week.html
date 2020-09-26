@@ -22,11 +22,12 @@
                       endif %}{{ start_of_week + i }}">{{ start_of_week + i }}</a><br />
                {% if events[(month, start_of_week + i)] %}<ul class="cal-event">
                                 {% for event in events[(month, start_of_week + i)] %}
-                                    <li>{{ event["title"] }}</li>
+                                    <li>{{ event["operation_name"] }} {{ event["title"] }}</li>
                                 {% endfor %}
                             </ul>{% endif %}</td>
           {% endfor %}
         </tr>
         </tbody>
     </table>
+    {% include "insert_event.html" %}
 {% endblock %}

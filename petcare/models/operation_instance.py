@@ -13,4 +13,4 @@ class OperationInstance(Base, ModelBase):
     operation = orm.relation("Operation", back_populates="operation_instance")
 
     event_id: int = sa.Column(sa.Integer, sa.ForeignKey("event.id"))
-    # event = orm.relation("Event", back_populates="operation")
+    event = orm.relation("Event", back_populates="operations")

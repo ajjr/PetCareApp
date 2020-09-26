@@ -4,7 +4,7 @@ from calendar import monthrange
 import flask
 
 import petcare.services.event_service as event_service
-from petcare.services import auth_cookie
+from petcare.services import auth_cookie, pet_service
 
 blueprint = flask.Blueprint("time", __name__, template_folder="templates")
 
@@ -40,6 +40,11 @@ def get_next_events():
     ]
 
 
+def event_insert_data(user_id):
+    return map(lambda x: x[0], pet_service.get_pets_for_user(user_id)), \
+           event_service.get_operations()
+
+
 @blueprint.route("/day", defaults={"date_day": None})
 @blueprint.route("/day/<string:date_day>")
 def day(date_day):
@@ -50,14 +55,16 @@ def day(date_day):
     if date_day is None:
         date_day = str(datetime.date.today())
     day_ = datetime.date.fromisoformat(date_day)
-    user_id = 3
+    # user_id = 3
     # Display events for day_
     # next_events = get_next_events()
     events = event_service.get_events_between(day_ - datetime.timedelta(days=1), day_ + datetime.timedelta(days=1),
                                               user_id)
-    print(events)
+    #pet_data = pet_service.get_pets_for_user(user_id)
+    pet_data, operations = event_insert_data(user_id)
+
     return flask.render_template("day.html", today=datetime.date.today().ctime(), day_str=day_.ctime(),
-                                 next_events=events[(day_.month, day_.day)], user_id=user_id)
+                                 next_events=events[(day_.month, day_.day)], pet_data=pet_data, operations=operations, user_id=user_id)
 
 
 @blueprint.route("/week")
@@ -76,9 +83,10 @@ def week(date_day=None):
     events = event_service.get_events_between(datetime.datetime(a_year, a_date.month, start_of_week),
                                               datetime.datetime(a_year, a_date.month, start_of_week + 7),
                                               user_id)
+    pet_data, operations = event_insert_data(user_id)
 
     return flask.render_template("week.html", start_of_week=start_of_week, year=a_year, month=a_date.month, week=a_week,
-                                 day_of_week=day_of_week, events=events, user_id=user_id)
+                                 day_of_week=day_of_week, events=events, user_id=user_id, operations=operations, pet_data=pet_data)
 
 
 @blueprint.route("/month")
@@ -100,10 +108,38 @@ def month(date_day=None):
     events = event_service.get_events_between(datetime.datetime(a_year, a_month, month_start),
                                               datetime.datetime(a_year, a_month, month_end),
                                               user_id)
+    pet_data, operations = event_insert_data(user_id)
 
     # event_dict[(event.date.month, event.date.day)] = el
 
     print(events)
 
     return flask.render_template("month.html", year=a_year, month=a_month, day=a_day, month_start=month_start,
-                                 month_end=month_end, events=events, date_stub=formatted_date, user_id=user_id)
+                                 month_end=month_end, events=events, date_stub=formatted_date, user_id=user_id, operations=operations, pet_data=pet_data)
+
+
+@blueprint.route("/insert_event", methods=["POST"])
+def insert_event():
+    req = flask.request
+    user_id = auth_cookie.get_auth(req)
+    if not user_id:
+        return flask.redirect("/login", code=302)
+
+    event_date = datetime.datetime.fromisoformat(req.form["event_date"] + " "
+                                                 + req.form["event_time"])
+    event_desc = req.form["event_description"]
+    pet_id = req.form["pet_id"]
+
+    if req.form["operation_id"]:
+        print("Inserting operation, too.")
+        operation_id = req.form["operation_id"]
+        operator = req.form["operator"]
+        event_service.insert_event(event_date, event_desc, user_id, pet_id, operation_id, operator)
+        target = req.referrer if req.referrer else "/"
+        return flask.redirect(target, code=302)
+
+
+    print("Insert event", event_date)
+    event_service.insert_simple_event(event_date, event_desc, user_id, pet_id)
+    target = req.referrer if req.referrer else "/"
+    return flask.redirect(target, code=302)

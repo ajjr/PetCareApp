@@ -36,7 +36,7 @@ def profile():
     pet_data = defaultdict(list)
     for pet, breed, species in pets:
         # pet, breed, species =
-        print(pet, breed, species)
+        # print(pet, breed, species)
         pet_data[species.name].append({
             "name": pet.name,
             "breed": breed.name

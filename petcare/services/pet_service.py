@@ -1,3 +1,4 @@
+from collections import defaultdict
 from typing import List
 
 import petcare.models.db_session as db

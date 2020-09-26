@@ -18,5 +18,6 @@ class User(Base, ModelBase):
     created_date = sa.Column(sa.DateTime, nullable=False, default=datetime.datetime.now, index=True)
     profile_image_url = sa.Column(sa.String)
     last_login = sa.Column(sa.DateTime, default=datetime.datetime.now, index=True)
+    #timezone = sa.Column(sa.String)
 
     pets: List[Pet] = orm.relation("Pet", order_by=Pet.name.desc(), back_populates="owner")

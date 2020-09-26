@@ -11,8 +11,8 @@ class Event(Base, ModelBase):
     __tablename__ = "event"
 
     id: int = sa.Column(sa.Integer, primary_key=True, autoincrement=True)
-    date: str = sa.Column(sa.DATE, nullable=False)
-    add_timestamp: datetime = sa.Column(sa.DateTime, nullable=False)
+    date: str = sa.Column(sa.DateTime, nullable=False)
+    add_timestamp: datetime = sa.Column(sa.DateTime, default=datetime.utcnow(), nullable=False)
     done_timestamp: datetime = sa.Column(sa.DateTime)
     done_date: str = sa.Column(sa.DATE)
     description: str = sa.Column(sa.String)
@@ -24,4 +24,4 @@ class Event(Base, ModelBase):
     user = orm.relation("User")
 
     # List of operations related to this event
-    # operations: List[Operation] = orm.relation("OperationInstance", back_populates="operation")
+    operations: OperationInstance = orm.relation("OperationInstance")
