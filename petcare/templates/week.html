@@ -15,13 +15,18 @@
         {% set daycount = namespace(value=1) %}
         <tr>
           {% for i in range(7) %}
+              {% if start_of_week + i > month_last %}
+                  {% set current_date = namespace(day=start_of_week + i - month_last, month=end_month) %}
+              {% else %}
+                  {% set current_date = namespace(day=start_of_week + i, month=start_month) %}
+              {% endif %}
               <td><a href="/day/{{ year }}-{%
-                      if month < 10 %}0{%
-                      endif %}{{ month }}-{%
-                      if start_of_week + i < 10 %}0{%
-                      endif %}{{ start_of_week + i }}">{{ start_of_week + i }}</a><br />
-               {% if events[(month, start_of_week + i)] %}<ul class="cal-event">
-                                {% for event in events[(month, start_of_week + i)] %}
+                      if current_date["month"] < 10 %}0{%
+                      endif %}{{ current_date["month"] }}-{%
+                      if current_date["day"] < 10 %}0{%
+                      endif %}{{ current_date["day"] }}">{{ current_date["day"] }}</a><br />
+               {% if events[(current_date["month"], current_date["day"])] %}<ul class="cal-event">
+                                {% for event in events[(current_date["month"], current_date["day"])] %}
                                     <li>{{ event["operation_name"] }} {{ event["title"] }}</li>
                                 {% endfor %}
                             </ul>{% endif %}</td>

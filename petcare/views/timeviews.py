@@ -1,5 +1,5 @@
 import datetime
-from calendar import monthrange
+import calendar
 
 import flask
 
@@ -78,15 +78,28 @@ def week(date_day=None):
         date_day = str(datetime.date.today())
     a_date = datetime.date.fromisoformat(date_day)
     start_of_week = a_date.day - a_date.weekday()
+    end_of_week = start_of_week + 6
     a_year, a_week, day_of_week = a_date.isocalendar()
+    month_first, month_last = calendar.monthrange(a_year, a_date.month)
+    start_month = a_date.month
+    end_month = a_date.month
 
-    events = event_service.get_events_between(datetime.datetime(a_year, a_date.month, start_of_week),
-                                              datetime.datetime(a_year, a_date.month, start_of_week + 7),
+    if start_of_week < 1:
+        start_month = a_date.month - 1
+        month_last = calendar.monthrange(a_year, a_date.month - 1)[1]
+        start_of_week = start_of_week + month_last
+    if end_of_week > month_last:
+        end_of_week = end_of_week - calendar.monthrange(a_year, a_date.month)[1]
+        end_month = a_date.month + 1
+
+    events = event_service.get_events_between(datetime.datetime(a_year, start_month, start_of_week),
+                                              datetime.datetime(a_year, end_month, end_of_week),
                                               user_id)
     pet_data, operations = event_insert_data(user_id)
+    print(start_month, start_of_week, end_month, end_of_week)
 
     return flask.render_template("week.html", start_of_week=start_of_week, year=a_year, month=a_date.month, week=a_week,
-                                 day_of_week=day_of_week, events=events, user_id=user_id, operations=operations, pet_data=pet_data)
+                                 day_of_week=day_of_week, start_month=start_month, end_month=end_month, month_last=month_last, events=events, user_id=user_id, operations=operations, pet_data=pet_data)
 
 
 @blueprint.route("/month")
@@ -102,7 +115,7 @@ def month(date_day=None):
     a_month = a_date.month
     a_year = a_date.year
     a_day = a_date.day
-    month_start, month_end = monthrange(a_year, a_month)
+    month_start, month_end = calendar.monthrange(a_year, a_month)
     formatted_date = str(a_date.year) + "-" + ("0" + str(a_date.month))[-2:] + "-"
 
     events = event_service.get_events_between(datetime.datetime(a_year, a_month, month_start),
