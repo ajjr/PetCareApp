@@ -8,7 +8,7 @@ from petcare.models.user import User
 CRYPTO_ROUNDS = 200000
 
 
-def get_user(user_id: str) -> User:
+def get_user(user_id: int) -> User:
     return db.get_db_obj(user_id, User)
 
 

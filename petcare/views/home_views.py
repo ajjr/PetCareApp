@@ -19,7 +19,7 @@ def index():
     if not user_id:
         return flask.redirect("/login", code=302)
 
-    events = event_service.get_current_events()
+    events = event_service.get_current_events(user_id)
 
     return flask.render_template("index.html", user_id=user_id, current_events=events)
 
@@ -35,8 +35,6 @@ def profile():
     pets = pet_service.get_pets_for_user(user_id)
     pet_data = defaultdict(list)
     for pet, breed, species in pets:
-        # pet, breed, species =
-        # print(pet, breed, species)
         pet_data[species.name].append({
             "name": pet.name,
             "breed": breed.name

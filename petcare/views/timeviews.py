@@ -97,6 +97,8 @@ def week(date_day=None):
                                               user_id)
     pet_data, operations = event_insert_data(user_id)
     print(start_month, start_of_week, end_month, end_of_week)
+    from pprint import pprint
+    pprint(events)
 
     return flask.render_template("week.html", start_of_week=start_of_week, year=a_year, month=a_date.month, week=a_week,
                                  day_of_week=day_of_week, start_month=start_month, end_month=end_month, month_last=month_last, events=events, user_id=user_id, operations=operations, pet_data=pet_data)
@@ -151,8 +153,20 @@ def insert_event():
         target = req.referrer if req.referrer else "/"
         return flask.redirect(target, code=302)
 
-
     print("Insert event", event_date)
-    event_service.insert_simple_event(event_date, event_desc, user_id, pet_id)
+    event_service.insert_event(event_date, event_desc, user_id, pet_id)
+    target = req.referrer if req.referrer else "/"
+    return flask.redirect(target, code=302)
+
+
+@blueprint.route("/mark_done/<int:event_id>")
+def mark_done(event_id: int):
+    req = flask.request
+    user_id = auth_cookie.get_auth(req)
+    if not user_id:
+        return flask.redirect("/login", code=302)
+
+    event_service.update_event_done(event_id)
+
     target = req.referrer if req.referrer else "/"
     return flask.redirect(target, code=302)

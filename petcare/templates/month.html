@@ -32,7 +32,7 @@
                         {% if events[(month, today)] %}
                             <ul class="cal-event">
                                 {% for event in events[(month, today)] %}
-                                    <li>{{ event["title"] }} {{ event["operation_name"] }}</li>
+                                    <li>{{ event["pet_name"] }}: {{ event["title"] }} {{ event["operation_name"] }}</li>
                                 {% endfor %}
                             </ul>
                         {% endif %}

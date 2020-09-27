@@ -1,5 +1,5 @@
 from collections import defaultdict
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import Optional, List
 
 import sqlalchemy.orm as orm
@@ -15,25 +15,27 @@ def get_event(event_id: int) -> Optional[Event]:
     return db.get_db_obj(event_id, Event)
 
 
-def get_current_events(limit=10) -> List[Event]:
+def get_current_events(user_id: int, limit=10) -> List[Event]:
     session = db.create_session()
     try:
         events = session.query(Event) \
             .options(orm.joinedload(Event.pet)) \
-            .options(orm.joinedload(Event.operation)) \
+            .options(orm.joinedload(Event.operations)) \
+            .filter(Event.user_id == user_id) \
             .order_by(Event.pet_id).limit(limit).all()
     finally:
         session.close()
     return events
 
 
-def get_events_between(start_date, end_date, user_id):
+def get_events_between(start_date, end_date, user_id) -> defaultdict:
     session = db.create_session()
     try:
         events = session.query(Event) \
             .options(orm.joinedload(Event.pet)) \
             .options(orm.joinedload(Event.operations)) \
-            .filter(and_(Event.date > start_date, Event.date < end_date)) \
+            .filter(and_(Event.date > start_date - timedelta(1),
+                         Event.date < end_date + timedelta(1))) \
             .filter(Event.user_id == user_id) \
             .order_by(Event.date).all()
         # events = session.query(Event, OperationInstance, Operation).select_from(Event) \
@@ -43,19 +45,22 @@ def get_events_between(start_date, end_date, user_id):
         #     .filter(Event.user_id == user_id) \
         #     .order_by(Event.date).all()
 
-        print(events)
+        # from pprint import pprint
+        # pprint(events)
         event_dict = defaultdict(list)
         for event in events:
             event_dict[(event.date.month, event.date.day)].append({
                 "title": event.description,
                 "pet_name": event.pet.name,
                 "pet_id": event.pet_id,
+                "event_done": event.done_timestamp,
                 "event_id": event.id
             })
             if event.operations:
                 for oper in event.operations:
                     event_dict[(event.date.month, event.date.day)][-1]["oi_id"] = oper.id
-                    event_dict[(event.date.month, event.date.day)][-1]["operation_name"] = oper.operation_id
+                    event_dict[(event.date.month, event.date.day)][-1]["operation_name"] = oper.operation_id.lower()
+                    event_dict[(event.date.month, event.date.day)][-1]["operator"] = oper.operator
 
 
 
@@ -87,25 +92,40 @@ def insert_simple_event(event_date: datetime, event_desc: str, user_id, pet_id=N
 
 
 def insert_event(event_date: datetime, event_desc: str, user_id, pet_id: int,
-                 operation_id: int, operator: str):
+                 operation_id=None, operator=None):
     event = Event()
     event.date = event_date
     event.description = event_desc
     event.user_id = user_id
     event.pet_id = pet_id
 
-    op = OperationInstance()
-    op.operator = operator
-    op.operation_id = operation_id
-    op.event = event
+    op = None
+    if operation_id:
+        op = OperationInstance()
+        op.operator = operator
+        op.operation_id = operation_id
+        op.event = event
 
     session = db.create_session()
     try:
         session.add(event)
-        session.add(op)
+        if op:
+            session.add(op)
         session.commit()
     finally:
         session.close()
+
+
+def update_event_done(event_id: int):
+    event = db.get_db_obj(event_id, Event)
+    event.done_timestamp = datetime.today()
+    session = db.create_session()
+    try:
+        session.merge(event)
+        session.commit()
+    finally:
+        session.close()
+
 
 
 
