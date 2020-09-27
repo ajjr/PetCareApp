@@ -33,6 +33,10 @@ def global_init(db_path: str):
     import petcare.models.breed
     # noinspection PyUnresolvedReferences
     import petcare.models.species
+    # noinspection PyUnresolvedReferences
+    import petcare.models.event_series
+    # noinspection PyUnresolvedReferences
+    import petcare.models.event_repeat
     Base.metadata.create_all(engine)
 
 

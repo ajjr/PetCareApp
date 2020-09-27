@@ -13,6 +13,9 @@
                     <option value="{{ operation.id }}" class="pet_list_option">{{ operation.id }}</option>{% endfor %}
                 </select></label>
         <input type="text" name="operator" placeholder="Tekijä" class="form-control">
-        <input type="submit" name="insert_event" value="Lisää tapahtuma" class="btn">
+        <input type="checkbox" name="repeat_check" id="repeat_check"><label for="repeat_check"
+                                                                                 class="form-check-label">Toista tapahtumaa</label>
+        <input type="date" name="repeat_rdate"> asti.
+        <input type="submit" name="insert_event" value="Lisää tapahtuma" class="form-control btn">
     </div>
 </form>

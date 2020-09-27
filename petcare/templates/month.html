@@ -28,11 +28,13 @@
                                     %}0{%
                                     endif %}{{ daycount.value }}">{{ daycount.value }}</a>
                             {% set daycount.value = daycount.value + 1 %}
+                        {% else %}
+                            {% set today = -1 %}
                         {% endif %}
                         {% if events[(month, today)] %}
                             <ul class="cal-event">
                                 {% for event in events[(month, today)] %}
-                                    <li>{{ event["pet_name"] }}: {{ event["title"] }} {{ event["operation_name"] }}</li>
+                                    <li>{{ event["event_time"].strftime("%H:%M")  }} {{ event["pet_name"] }}: {{ event["title"] }} {{ event["operation_name"] }}</li>
                                 {% endfor %}
                             </ul>
                         {% endif %}

@@ -27,7 +27,7 @@
                       endif %}{{ current_date["day"] }}">{{ current_date["day"] }}</a><br />
                {% if events[(current_date["month"], current_date["day"])] %}<ul class="cal-event">
                                 {% for event in events[(current_date["month"], current_date["day"])] %}
-                                    <li>{{ event["operation_name"] }} {{ event["title"] }}</li>
+                                    <li>{{ event["event_time"].strftime("%H:%M")  }} {{ event["operation_name"] }} {{ event["title"] }}</li>
                                 {% endfor %}
                             </ul>{% endif %}</td>
           {% endfor %}

@@ -1,3 +1,4 @@
+import calendar
 from collections import defaultdict
 from datetime import datetime, timedelta
 from typing import Optional, List
@@ -7,6 +8,8 @@ from sqlalchemy import and_
 
 import petcare.models.db_session as db
 from petcare.models.event import Event
+from petcare.models.event_repeat import EventRepeat
+from petcare.models.event_series import EventSeries
 from petcare.models.operation import Operation
 from petcare.models.operation_instance import OperationInstance
 
@@ -15,14 +18,23 @@ def get_event(event_id: int) -> Optional[Event]:
     return db.get_db_obj(event_id, Event)
 
 
-def get_current_events(user_id: int, limit=10) -> List[Event]:
+def get_current_events(user_id: int, pet_id=None, limit=10) -> List[Event]:
     session = db.create_session()
     try:
         events = session.query(Event) \
             .options(orm.joinedload(Event.pet)) \
             .options(orm.joinedload(Event.operations)) \
             .filter(Event.user_id == user_id) \
-            .order_by(Event.pet_id).limit(limit).all()
+            .filter(Event.date > datetime.today() - timedelta(1)) \
+            .order_by(Event.pet_id).limit(limit).all() \
+            if not pet_id else \
+            session.query(Event) \
+                .options(orm.joinedload(Event.pet)) \
+                .options(orm.joinedload(Event.operations)) \
+                .filter(Event.user_id == user_id) \
+                .filter(Event.pet_id == pet_id) \
+                .filter(Event.date > datetime.today() - timedelta(1)) \
+                .order_by(Event.date).limit(limit).all()
     finally:
         session.close()
     return events
@@ -45,8 +57,8 @@ def get_events_between(start_date, end_date, user_id) -> defaultdict:
         #     .filter(Event.user_id == user_id) \
         #     .order_by(Event.date).all()
 
-        # from pprint import pprint
-        # pprint(events)
+        from pprint import pprint
+        pprint(events)
         event_dict = defaultdict(list)
         for event in events:
             event_dict[(event.date.month, event.date.day)].append({
@@ -54,7 +66,8 @@ def get_events_between(start_date, end_date, user_id) -> defaultdict:
                 "pet_name": event.pet.name,
                 "pet_id": event.pet_id,
                 "event_done": event.done_timestamp,
-                "event_id": event.id
+                "event_id": event.id,
+                "event_time": event.date.time()
             })
             if event.operations:
                 for oper in event.operations:
@@ -111,6 +124,44 @@ def insert_event(event_date: datetime, event_desc: str, user_id, pet_id: int,
         session.add(event)
         if op:
             session.add(op)
+        session.commit()
+    finally:
+        session.close()
+
+
+def insert_repeating_event(ldate: datetime, rdate: datetime, event_desc: str, user_id, pet_id: int,
+                           operation_id, operator=None, repeat_name=None):
+    delta = abs((rdate - ldate).days)
+    session = db.create_session()
+    try:
+        series = EventSeries()
+        series.name = repeat_name if repeat_name else "Toistuva tapahtuma alk. " + str(ldate)
+        session.add(series)
+
+        for i in range(delta):
+            e = Event()
+            e.date = ldate + timedelta(i)
+            e.description = event_desc
+            e.user_id = user_id
+            e.pet_id = pet_id
+
+            op = OperationInstance()
+            op.operator = operator
+            op.operation_id = operation_id
+            op.event = e
+
+            repeat = EventRepeat()
+            repeat.event_series = series
+            repeat.event = e
+
+            session.add(e)
+            session.add(op)
+            session.add(repeat)
+            #print(e.date)
+            #print(e)
+            #print(op)
+            #print(repeat)
+
         session.commit()
     finally:
         session.close()

@@ -5,7 +5,7 @@ from flask import request
 from flask import redirect
 import petcare.services.pet_service as pet_service
 import petcare.services.user_service as user_service
-from petcare.services import auth_cookie
+from petcare.services import auth_cookie, event_service
 
 blueprint = flask.Blueprint("pet", __name__, template_folder="templates")
 
@@ -59,9 +59,10 @@ def pet_get(pet_name=None):
 
     breeds = pet_service.get_breeds()
     species = pet_service.get_species()
+    events = event_service.get_current_events(user_id, pet_id, 5)
     return flask.render_template("pet.html", pet_id=pet_id, pet_data=pet_data, species_data=sps_data,
                                  breed_data=breed_data,
-                                 breeds=breeds, species=species, user_id=user_id)
+                                 breeds=breeds, species=species, user_id=user_id, events=events)
 
 
 @blueprint.route("/pet", methods=["POST"])

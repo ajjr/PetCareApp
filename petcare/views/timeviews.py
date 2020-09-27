@@ -113,6 +113,12 @@ def month(date_day=None):
 
     if date_day is None:
         date_day = str(datetime.date.today())
+    elif date_day.isnumeric():
+        if 0 < int(date_day) < 10:
+            date_day = str(datetime.date.today().year) + "-0" + date_day + "-01"
+        elif 10 <= int(date_day) <= 12:
+            date_day = str(datetime.date.today().year) + "-" + date_day + "-01"
+
     a_date = datetime.date.fromisoformat(date_day)
     a_month = a_date.month
     a_year = a_date.year
@@ -120,7 +126,7 @@ def month(date_day=None):
     month_start, month_end = calendar.monthrange(a_year, a_month)
     formatted_date = str(a_date.year) + "-" + ("0" + str(a_date.month))[-2:] + "-"
 
-    events = event_service.get_events_between(datetime.datetime(a_year, a_month, month_start),
+    events = event_service.get_events_between(datetime.datetime(a_year, a_month, 1),
                                               datetime.datetime(a_year, a_month, month_end),
                                               user_id)
     pet_data, operations = event_insert_data(user_id)
@@ -145,11 +151,16 @@ def insert_event():
     event_desc = req.form["event_description"]
     pet_id = req.form["pet_id"]
 
+
     if req.form["operation_id"]:
         print("Inserting operation, too.")
         operation_id = req.form["operation_id"]
         operator = req.form["operator"]
-        event_service.insert_event(event_date, event_desc, user_id, pet_id, operation_id, operator)
+        if req.form["repeat_check"]:
+            rdate = datetime.datetime.combine(datetime.date.fromisoformat(req.form["repeat_rdate"]), datetime.datetime.min.time())
+            event_service.insert_repeating_event(event_date, rdate, event_desc, user_id, pet_id, operation_id, operator)
+        else:
+            event_service.insert_event(event_date, event_desc, user_id, pet_id, operation_id, operator)
         target = req.referrer if req.referrer else "/"
         return flask.redirect(target, code=302)
 
@@ -170,3 +181,15 @@ def mark_done(event_id: int):
 
     target = req.referrer if req.referrer else "/"
     return flask.redirect(target, code=302)
+
+
+@blueprint.route("/insert_repeat")
+def insert_repeat():
+    event_service.insert_repeating_event(
+        datetime.datetime(2020, 9, 27, 11, 00),
+        datetime.datetime(2020, 11, 22, 11, 00),
+        "", 0, 0)
+
+    target = req.referrer if req.referrer else "/"
+    return flask.redirect(target, code=302)
+

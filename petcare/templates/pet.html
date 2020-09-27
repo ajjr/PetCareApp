@@ -1,56 +1,99 @@
 {% extends "_layout.html" %}
 {% block main_content %}
-<div class="container">
-    <form class="form-container" action="/pet" method="post" class="pet-form" id="current_pet"
-          data-id="{{ pet_id }}"
-          data-species="">
-        <div class="row"><label>
-            <input class="form-control pet-name" type="text" name="pet_name" {% if pet_data['name'] %}placeholder="{{ pet_data['name'] }}"{% else %}placeholder="Lemmikin nimi"{% endif %} value="{{ pet_data['name'] }}">
-        </label></div>
-        <div class="row">
-            <label for="select_species">Laji
-                <select class="custom-select custom-select-sm" name="species_id" id="select_species"> {% for a_species in species %}
-                    <!--suppress HtmlUnknownAttribute -->
-                    <option {% if species_data[
-                    'id'] == a_species.id %}
-                    selected
-                    {% endif %} value="{{ a_species.id }}" class="pet_list_option">{{ a_species.name }}</option>{%
-                    endfor %}
-                </select></label>
+    <div class="container">
+        <form class="form-container pet-form" action="/pet" method="post" id="current_pet"
+              data-id="{{ pet_id }}"
+              data-species="">
 
-            <label for="select_breed">Rotu
-                <select class="custom-select custom-select-sm" name="breed_id" id="select_breed">{% for breed in breeds %}
-                    <option {% if breed_data[
-                    'id'] == breed.id %}
-                    selected
-                    {% endif %} value="{{ breed.id }}" class="pet_list_option">{{ breed.name }}</option>{% endfor %}
-                </select></label>
+            <div class="row">
+                <div class="col">
+                    <div class="row">
+                        <label>
+                         <input class="form-control pet-name" type="text" name="pet_name" {% if pet_data['name'] %}placeholder="{{ pet_data['name'] }}"
+                             {% else %}placeholder="Lemmikin nimi"{% endif %} value="{{ pet_data['name'] }}">
+                        </label>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label for="select_species">Laji
+                             <select class="custom-select custom-select-sm" name="species_id" id="select_species">
+                             {% for a_species in species %}
+                            <!--suppress HtmlUnknownAttribute -->
+                                <option {% if species_data['id'] == a_species.id %}selected{% endif %} value="{{ a_species.id }}"
+                                class="pet_list_option">{{ a_species.name }}</option>
+                             {% endfor %}
+                             </select>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                        <label for="select_breed">Rotu
+                        <select class="custom-select custom-select-sm" name="breed_id" id="select_breed">
+                        {% for breed in breeds %}
+                            <option {% if breed_data['id'] == breed.id %}selected{% endif %} value="{{ breed.id }}"
+                                class="pet_list_option">{{ breed.name }}</option>
+                        {% endfor %}
+                        </select>
+                        </label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                    Lemmikin syntymäaika: <input class="form-control" type="date" name="pet_birthday"
+                                                 value="{{ pet_data['birthday'] }}">
+                        </div>
+                    </div>
+                    <div class="row" style="padding: 10px">
+                         {% if pet_data['age'] %}
+                         <div class="col" style="text-align: center; background: darkgrey; margin-left: auto;margin-right: auto">
+                            {{ pet_data['name'] }} on {{ pet_data['age'] }} {% if pet_data['age'] > 1 %}vuotta{% else %}vuoden vanha{% endif %} vanha.
+                         </div>
+                         {% endif %}
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="card" style="width: 100%;">
+                        <div class="card-header">Lähiaikojen tapahtumat</div>
+                            <div class="card-body">
+                                <ul class="list-group list-group-flush">
+                                {% for event in events %}
+                                    <li class="list-group-item">{{ event.date.day }}.{{ event.date.month }}.{{ event.date.year }}
+                                    {% for op in event.operations %}
+                                        {{ op.operation_id }}{% endfor %} {{ event.description }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                     </div>
+                </div>
 
-            <div class="cell">
-                Lemmikin syntymäaika: <input class="form-control" type="date" name="pet_birthday" value="{{ pet_data['birthday'] }}">
-            </div>
-        </div>
-            {% if pet_data['age'] %}<div class="row" style="text-align: center; background: darkgrey; margin-left: auto;margin-right: auto">
-                {{ pet_data['name'] }} on {{ pet_data['age'] }} {% if pet_data['age'] > 1%}vuotta{% else %}vuoden vanha{% endif %} vanha.
-            </div> {% endif %}
 
-        <div class="row"><label for="summary_field">Kuvaus</label>
-            <textarea class="form-control" name="pet_summary" id="summary_field" cols="30" rows="10" class="petinfo">{{ pet_data['summary'] }}
+
+            <div class="row"><label for="summary_field">Kuvaus</label>
+                <textarea class="form-control" name="pet_summary" id="summary_field" cols="30" rows="10"
+                          class="petinfo">{{ pet_data['summary'] }}
             </textarea></div>
-        <div class="row"><label for="owner_field">Omistaja</label><input class="form-control" id="owner_field" type="text" name="owner_id"
-                                                                         placeholder="{{ pet_data['owner'] }}"  value="{{ pet_data['owner'] }}"></div>
-        <div class="row"><label for="breeder_field">Kasvattaja</label><input class="form-control" id="breeder_field" type="text"
-                                                                             name="breeder"
-                                                                             value="{{ pet_data['breeder'] }}"></div>
-        <div class="row"> {% if pet_id is defined %}
-            <input type="hidden" name="pet_id" value="{{ pet_id }}">
+            <div class="row"><label for="owner_field">Omistaja</label><input class="form-control" id="owner_field"
+                                                                             type="text" name="owner_id"
+                                                                             placeholder="{{ pet_data['owner'] }}"
+                                                                             value="{{ pet_data['owner'] }}"></div>
+            <div class="row"><label for="breeder_field">Kasvattaja</label><input class="form-control" id="breeder_field"
+                                                                                 type="text"
+                                                                                 name="breeder"
+                                                                                 value="{{ pet_data['breeder'] }}">
+            </div>
+            <div class="row"> {% if pet_id is defined %}
+                <input type="hidden" name="pet_id" value="{{ pet_id }}">
             {% endif %}
-            <input type="hidden" name="pet_image_url" value="">
-            <input class="btn btn-primary" type="submit" {% if pet_id %}value="Päivitä"{% else %}value="Lisää"{% endif %}>
-            {% if pet_id %}
-            <input type="submit" class="btn btn-danger" name="delete" Value="Poista">
-            {% endif %}
-        </div>
-    </form>
-</div>
+                <input type="hidden" name="pet_image_url" value="">
+                <input class="btn btn-primary" type="submit" {% if pet_id %}value="Päivitä"
+                       {% else %}value="Lisää"{% endif %}>
+                {% if pet_id %}
+                    <input type="submit" class="btn btn-danger" name="delete" Value="Poista">
+                {% endif %}
+            </div>
+        </form>
+
+    </div>
 {% endblock %}
