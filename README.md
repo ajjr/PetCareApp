@@ -75,16 +75,21 @@ Sovellus on asennettu Herokuun osoitteessa: https://thawing-harbor-87016.herokua
     ```
 
 ## Nykytila
+Herokuun asennetun sovelluksen nykytila:
 - Päivä-, viikko- ja kuukausinäkymät toimivat ja hakevat tietokannasta kullekin päivällä kuuluvat tapahtumat.
 - Lemmikkejä on mahdollista lisätä tietokantaan ja muuttaa niiden tietoja.
 - Lemmikin tiedot voi hakea lomakkeelle surffaamalla osoitteeseen */pet/[PET_NAME]*. Esim. */pet/Haukku* näyttää kirjautuneen käyttäjän Haukku-nimisen lemmikin tiedot.
 - Virheenkäsittely on tällä hetkellä olematonta. Esimerkiksi hakemalla tietokannasta puuttuvaa lemmikkiä, tuottaa TypeError poikkeustilanteen, jota ei käsitellä.
 - Käyttähallintaa ei ole toteutettu. Oletususerid on kaikissa operaatioissa 3 ja sovellus odottaa, että sille tunnukselle on olemassa käyttäjä.
 
-## Seuraavaksi
+## Toteutettu
+Toteutettu ja toimii sisäisesti, mutta Herokuun asentaminen odottaa tietokantamigraatioita:
 - Käyttäjän rekisteröityminen ja tunnistaminen
-- Virheenhallinta: virheellisen syötteen nappaaminen ja tietokannan nollahauista toipuminen
 - Tapahtuman ja tehtävän lisääminen
+
+## Seuraavaksi
+- Virheenhallinta: virheellisen syötteen nappaaminen ja tietokannan nollahauista toipuminen
+
 
 ## Käsitteitä
 | käsite    | synonyymi | tietomallinimi    | kommentti |
