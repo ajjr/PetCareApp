@@ -146,23 +146,31 @@ def insert_event():
     if not user_id:
         return flask.redirect("/login", code=302)
 
-    event_date = datetime.datetime.fromisoformat(req.form["event_date"] + " "
-                                                 + req.form["event_time"])
+    referrer = req.referrer if req.referrer else "/"
+    req_date = req.form["event_date"]
+    req_time = req.form["event_time"]
+
+    if not (req_date and req_time):
+        return flask.redirect(referrer, code=302)
+
+    event_date = datetime.datetime.fromisoformat(req_date + " " + req_time)
     event_desc = req.form["event_description"]
     pet_id = req.form["pet_id"]
-
 
     if req.form["operation_id"]:
         print("Inserting operation, too.")
         operation_id = req.form["operation_id"]
         operator = req.form["operator"]
         if req.form["repeat_check"]:
-            rdate = datetime.datetime.combine(datetime.date.fromisoformat(req.form["repeat_rdate"]), datetime.datetime.min.time())
+            req_rdate = req.form["repeat_rdate"]
+            if not req_rdate:
+                return flask.redirect(referrer, code=302)
+
+            rdate = datetime.datetime.combine(datetime.date.fromisoformat(req_rdate), datetime.datetime.min.time())
             event_service.insert_repeating_event(event_date, rdate, event_desc, user_id, pet_id, operation_id, operator)
         else:
             event_service.insert_event(event_date, event_desc, user_id, pet_id, operation_id, operator)
-        target = req.referrer if req.referrer else "/"
-        return flask.redirect(target, code=302)
+        return flask.redirect(referrer, code=302)
 
     print("Insert event", event_date)
     event_service.insert_event(event_date, event_desc, user_id, pet_id)
