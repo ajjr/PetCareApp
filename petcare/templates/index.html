@@ -1,11 +1,14 @@
 {% extends "_layout.html" %}
 {% block main_content %}
-<h1>Hello, World</h1>
-<ul class="dashboard-list">
+    {% if current_events %}
+    <h1>Ajankohtaiset tapahtumat</h1>
+    <ul class="dashboard-list">
     {% for e in current_events %}
     <li>{{ e.date }} {{ e.description }} {{ e.pet.name }}</li>
     {% endfor %}
-</ul>
-
+    </ul>
+    {% else %}
+    <p>Ei ajankohtaisia tapahtumia.</p>
+    {% endif %}
 
 {% endblock %}
