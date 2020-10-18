@@ -1,7 +1,7 @@
 # PetCareApp
 PetCareAppin avulla on tarkoitus pitää kirjaa oman lemmikkieläimen hoitotoimenpiteistä ja hyvinvointiin liittyvistä tapahtumista. Se koostuu päivä-, viikko- ja kuukausinäkymistä, jotka näyttävät päivittäin, viikoittain tai kuukausittain toistuvat toimenpiteet. Tällaisia toimenpiteitä eräiden koirarotujen kohdalla voivat olla esim. trimmaus, pesu ja kynsien leikkuu. Jos eläimelle määrätään lääkekuuri, päivittäisiä toimenpiteitä ovat lääkkeen annostelu ja syöttäminen. Lisäksi sovellukseen pitäisi voida kirjata eläimen päivittäinen ruokavalio. Tämä voidaan yhdistää terveyteen liittyviin tapahtumiin kuten esim. yllättävään ripuliin, jolloin omistaja voi tehdä päätelmiä ruokavalion ja/tai lääkkeiden sopivuudesta lemmikilleen.
 
-Sovellus on asennettu Herokuun osoitteessa: https://thawing-harbor-87016.herokuapp.com. Tämä asennus päivittyy automaattisesti vastaamaan tämän Git-repositorion tilaa. Kokeile esim. lisätä lemmikki osoitteessa https://thawing-harbor-87016.herokuapp.com/pet ja sitten hakea lemmikin tiedot osoitteella https://thawing-harbor-87016.herokuapp.com/pet/[lemmikin nimi] Tai sitten voit hakea Rottiksen tiedot osoitteesta https://thawing-harbor-87016.herokuapp.com/pet/Rottis ja muokata sen tietoja. En tiedä, mitä tapahtuu, jos muuttaa lemmikin nimeä, mutta sitäkin kannattaa kokeilla. Toivon mukaan se lataa saman lemmikkitietueen uudella nimellä ja osoitteella.
+Sovellus on asennettu Herokuun osoitteessa: https://thawing-harbor-87016.herokuapp.com. Tämä asennus päivittyy automaattisesti vastaamaan tämän Git-repositorion tilaa. Jotta sovellusta voi testat, testaajan on enisn luotava itselleen käyttäjä. Rekisteröintilomake kysyy käyttäjänimeä, nimeä ja sähköpostiosoitetta, mutta näiden ei tarvitse olla aitoja tai edes näyttää aidoilta. Tämän jälkeen kannattaa luoda itselleen lemmikki profiili-sivun kautta, minkä jälkeen lemmikille voi lisätä tapahtumia. Jokaisella lemmikillä on omasivu https://thawing-harbor-87016.herokuapp.com/pet/[lemmikin nimi], joka näyttää lemmikin tiedot ja jonka kautta niitä voi  muokata. Käyttäjän profiilisivun kautta käyttäjä näkee omat lemmikkinsä ja voi lisätä uusia.
 
 ## Asennus
 
@@ -79,16 +79,8 @@ Herokuun asennetun sovelluksen nykytila:
 - Päivä-, viikko- ja kuukausinäkymät toimivat ja hakevat tietokannasta kullekin päivällä kuuluvat tapahtumat.
 - Lemmikkejä on mahdollista lisätä tietokantaan ja muuttaa niiden tietoja.
 - Lemmikin tiedot voi hakea lomakkeelle surffaamalla osoitteeseen */pet/[PET_NAME]*. Esim. */pet/Haukku* näyttää kirjautuneen käyttäjän Haukku-nimisen lemmikin tiedot.
-- Virheenkäsittely on tällä hetkellä olematonta. Esimerkiksi hakemalla tietokannasta puuttuvaa lemmikkiä, tuottaa TypeError poikkeustilanteen, jota ei käsitellä.
-- Käyttähallintaa ei ole toteutettu. Oletususerid on kaikissa operaatioissa 3 ja sovellus odottaa, että sille tunnukselle on olemassa käyttäjä.
-
-## Toteutettu
-Toteutettu ja toimii sisäisesti, mutta Herokuun asentaminen odottaa tietokantamigraatioita:
-- Käyttäjän rekisteröityminen ja tunnistaminen
-- Tapahtuman ja tehtävän lisääminen
-
-## Seuraavaksi
-- Virheenhallinta: virheellisen syötteen nappaaminen ja tietokannan nollahauista toipuminen
+- Käyttäjän rekisteröityminen ja kirjautuminen toteuttettu.
+- Tapahtuman ja tehtävän lisääminen on toteutettu.
 
 
 ## Käsitteitä
