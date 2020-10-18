@@ -156,7 +156,7 @@ def insert_event():
         print("Inserting operation, too.")
         operation_id = req.form["operation_id"]
         operator = req.form["operator"]
-        if req.form["repeat_check"]:
+        if "repeat_check" in req.form.keys():
             rdate = datetime.datetime.combine(datetime.date.fromisoformat(req.form["repeat_rdate"]), datetime.datetime.min.time())
             event_service.insert_repeating_event(event_date, rdate, event_desc, user_id, pet_id, operation_id, operator)
         else:
