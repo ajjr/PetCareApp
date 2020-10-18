@@ -95,6 +95,7 @@ def account_get(state=""):
     return flask.render_template("account.html")
 
 
+@blueprint.route("/register", methods=["POST"])
 @blueprint.route("/account", methods=["POST"])
 def account_post():
     username = flask.request.form["username"]
