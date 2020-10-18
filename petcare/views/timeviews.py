@@ -161,7 +161,7 @@ def insert_event():
         print("Inserting operation, too.")
         operation_id = req.form["operation_id"]
         operator = req.form["operator"]
-        if req.form["repeat_check"]:
+        if "repeat_check" in req.form.keys():
             req_rdate = req.form["repeat_rdate"]
             if not req_rdate:
                 return flask.redirect(referrer, code=302)
