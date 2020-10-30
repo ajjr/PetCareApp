@@ -94,25 +94,3 @@ Herokuun asennetun sovelluksen nykytila:
 | tehtävä | toimenpide  | OperationInstance | Suunniteltu tai toteutettu tehtävä, jolle on määrätty ajankohta. Tämä tekee tehtävästä tapahtuman, joka määrää sen ajankohdan. |
 | käyttäjä | omistaja   | User              | Käyttäjä luodaan rekisteröitymällä. Jokaisen lemmikin omistaja on käyttäjä ja jokaiseen tapahtumaan liittyy käyttäjä. | 
 
-
-## Näkymät ja reititykset
-Toteutetut:
-- Päivänäkymä
-- Viikkonäkymä
-- Kuukausinäkymä
-- Lemmikki
-
-Suunnitellut:
-- Käyttäjän rekisteröityminen
-- Sisäänkirjautuminen
-- Tapahtuman lisääminen
-- Tehtävän lisääminen
-- Toistuvan tehtävän lisääminen
-
-## Tavoite 18.10.
-Tavoitteena 18.10. minulla on MVP, jolla on mahdollista:
-- kirjautua sovellukseen
-- lisätä tietokantaan eläin
-- poistaa sellainen eläin, johon ei liity tapahtumia
-- lisätä eläimelle tapahtumia ja toimenpiteitä
-- näyttää eläimen tapahtumat ja aikataulutetut toimenpiteet päivä, viikko ja kuukausitasolla
